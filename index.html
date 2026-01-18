@@ -2,112 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Irsa Foods | Online Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background: #ffffff; color: #212121; }
 
-    body {
-      background: #FFFFFF;
-      color: #212121;
-    }
-
-    /* ================= HEADER ================= */
+    /* HEADER */
     header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 20px;
+      justify-content: space-between;
+      padding: 16px 24px;
       border-bottom: 1px solid #eee;
     }
 
     .logo {
       display: flex;
       align-items: center;
+      gap: 10px;
     }
 
-    .logo img {
-      height: 50px;
-      margin-right: 10px;
-    }
+    .logo img { height: 48px; }
+    .logo span { font-size: 22px; font-weight: bold; color: #D90416; }
 
-    .logo span {
-      color: #D90416;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    nav a,
-    nav span {
-      margin: 0 15px;
-      color: #212121;
+    nav a {
+      margin: 0 10px;
       text-decoration: none;
+      font-weight: bold;
+      color: #212121;
+    }
+
+    nav a:hover { color: #D90416; }
+
+    .search-bar input {
+      padding: 8px 12px;
+      width: 220px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .cart-icon {
       font-weight: bold;
       cursor: pointer;
     }
 
-    nav a:hover,
-    nav span:hover {
-      color: #D90416;
-    }
-
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #fff;
-      min-width: 160px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      z-index: 1;
-    }
-
-    .dropdown-content a {
-      color: #212121;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    /* ================= MAIN ================= */
-    main {
-      padding: 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    /* ================= PROMO SLIDER ================= */
+    /* SLIDER */
     .slider {
-      position: relative;
       overflow: hidden;
-      margin-bottom: 40px;
+      margin: 24px auto;
+      max-width: 1200px;
       border-radius: 8px;
     }
 
     .slides {
       display: flex;
-      transition: transform 0.5s ease-in-out;
+      transition: transform 0.5s ease;
     }
 
-    .slides img {
-      width: 100%;
-      flex-shrink: 0;
-    }
+    .slides img { width: 100%; flex-shrink: 0; }
 
-    /* ================= PRODUCTS GRID ================= */
+    /* PRODUCTS */
+    main { max-width: 1200px; margin: auto; padding: 24px; }
+
     .products {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -116,178 +74,138 @@
 
     .product {
       border: 1px solid #eee;
+      border-radius: 8px;
       padding: 16px;
       text-align: center;
-      border-radius: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .product:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    }
+    .product img { width: 100%; margin-bottom: 10px; }
+    .product h3 { font-size: 18px; margin-bottom: 6px; }
+    .product p { font-weight: bold; margin-bottom: 10px; }
 
-    .product img {
-      width: 100%;
-      height: auto;
-      margin-bottom: 12px;
-    }
-
-    .product h2 {
-      font-size: 18px;
-      margin-bottom: 6px;
-    }
-
-    .product p {
+    .product button {
+      margin: 4px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
       font-weight: bold;
-      margin-bottom: 12px;
     }
 
-    .product a {
-      display: inline-block;
-      background: #D90416;
-      color: #fff;
-      padding: 10px 18px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 14px;
-    }
+    .add-cart { background: #212121; color: #fff; }
+    .buy-now { background: #D90416; color: #fff; }
 
-    .product a:hover {
-      background: #F25C54;
-    }
-
-    /* ================= FOOTER ================= */
+    /* FOOTER */
     footer {
       background: #212121;
       color: #fff;
-      padding: 30px 20px;
+      padding: 32px 20px;
+      margin-top: 60px;
       text-align: center;
-      margin-top: 50px;
-    }
-
-    footer p {
-      margin-bottom: 10px;
     }
 
     footer a {
       color: #F25C54;
+      margin: 0 10px;
       text-decoration: none;
-      margin: 0 6px;
-    }
-
-    .social-icons img {
-      width: 24px;
-      height: 24px;
-      margin: 0 6px;
-      vertical-align: middle;
     }
   </style>
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
 <header>
   <div class="logo">
-    <img src="images/logo.png" alt="Irsa Foods Logo">
+    <img src="images/logo.png">
     <span>Irsa Foods</span>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search products">
   </div>
 
   <nav>
     <a href="index.html">Home</a>
-    <a href="order.html">Order</a>
-    <a href="faq.html">FAQ</a>
-    <a href="contact.html">Contact</a>
-
-    <div class="dropdown">
-      <span>Policies</span>
-      <div class="dropdown-content">
-        <a href="policies/privacy-policy.html">Privacy Policy</a>
-        <a href="policies/terms.html">Terms</a>
-        <a href="policies/disclaimer.html">Disclaimer</a>
-      </div>
-    </div>
+    <a href="order.html">Cart (<span id="cartCount">0</span>)</a>
   </nav>
 </header>
 
-<!-- ================= MAIN ================= -->
-<main>
-
-  <!-- PROMO SLIDER -->
-  <div class="slider">
-    <div class="slides" id="slides">
-      <img src="images/promo1.jpg" alt="Promo 1">
-      <img src="images/promo2.jpg" alt="Promo 2">
-      <img src="images/promo3.jpg" alt="Promo 3">
-    </div>
+<div class="slider">
+  <div class="slides" id="slides">
+    <img src="images/promo1.jpg">
+    <img src="images/promo2.jpg">
+    <img src="images/promo3.jpg">
   </div>
+</div>
 
-  <!-- PRODUCTS GRID -->
-  <section class="products" id="products-grid">
-    <!-- Products injected via JS -->
-  </section>
-
+<main>
+  <section class="products" id="products"></section>
 </main>
 
-<!-- ================= FOOTER ================= -->
 <footer>
-  <p>Contact / WhatsApp: +92 317 7910929</p>
-
+  <p>WhatsApp: <a href="https://wa.me/923177910929">+92 317 7910929</a></p>
   <p>
-    <a href="policies/privacy-policy.html">Privacy Policy</a> |
-    <a href="policies/terms.html">Terms</a> |
-    <a href="policies/disclaimer.html">Disclaimer</a>
+    <a href="#">Instagram</a> |
+    <a href="#">Facebook</a>
   </p>
-
-  <div class="social-icons">
-    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-    <a href="#"><img src="images/twitter.png" alt="Twitter"></a>
-  </div>
 </footer>
 
-<!-- ================= SCRIPTS ================= -->
 <script>
-  /* -------- PROMO SLIDER -------- */
-  let currentSlide = 0;
-  const slides = document.getElementById("slides");
-  const totalSlides = slides.children.length;
-
+  /* SLIDER */
+  let slide = 0;
   setInterval(() => {
-    currentSlide = (currentSlide + 1) % totalSlides;
-    slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    slide = (slide + 1) % 3;
+    document.getElementById("slides").style.transform = `translateX(-${slide * 100}%)`;
   }, 4000);
 
-  /* -------- PRODUCTS (CART-READY) -------- */
-  const products = [
-    {
-      id: 1,
-      name: "BelVita Biscuits",
-      price: 150,
-      image: "images/belvita.jpg"
-    },
-    {
-      id: 2,
-      name: "Lip Gloss",
-      price: 250,
-      image: "images/lip-gloss.jpg"
-    }
-  ];
+  /* CART */
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const grid = document.getElementById("products-grid");
+  function updateCartCount() {
+    document.getElementById("cartCount").textContent =
+      cart.reduce((s, i) => s + i.qty, 0);
+  }
 
-  products.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "product";
-    div.innerHTML = `
-      <img src="${p.image}" alt="${p.name}">
-      <h2>${p.name}</h2>
-      <p>PKR ${p.price}</p>
-      <a href="order.html?add=${p.id}&qty=1">Order Now</a>
-    `;
-    grid.appendChild(div);
+  function addToCart(product, qty = 1) {
+    const found = cart.find(i => i.id === product.id);
+    if (found) found.qty += qty;
+    else cart.push({ ...product, qty });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+  }
+
+  /* PRODUCTS */
+  let allProducts = [];
+
+  fetch("products/products.json")
+    .then(r => r.json())
+    .then(data => {
+      allProducts = data;
+      renderProducts(data);
+    });
+
+  function renderProducts(list) {
+    const grid = document.getElementById("products");
+    grid.innerHTML = "";
+    list.forEach(p => {
+      grid.innerHTML += `
+        <div class="product">
+          <img src="${p.image}">
+          <h3>${p.name}</h3>
+          <p>PKR ${p.price}</p>
+          <button class="add-cart" onclick='addToCart(${JSON.stringify(p)})'>Add to Cart</button>
+          <button class="buy-now" onclick='addToCart(${JSON.stringify(p)}); location.href="order.html"'>Buy Now</button>
+        </div>
+      `;
+    });
+  }
+
+  document.getElementById("search").addEventListener("input", e => {
+    const q = e.target.value.toLowerCase();
+    renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q)));
   });
+
+  updateCartCount();
 </script>
 
 </body>
