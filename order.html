@@ -1,120 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Place Your Order | Irsa Foods</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    body { font-family: Arial, sans-serif; background:#FFFFFF; color:#212121; padding:0; margin:0; }
-    header { display:flex; justify-content: space-between; align-items:center; padding:20px; border-bottom:1px solid #eee; }
-    .logo { display:flex; align-items:center; }
-    .logo img { height:50px; margin-right:10px; }
-    .logo span { color:#D90416; font-size:24px; font-weight:bold; }
-    nav a { margin:0 15px; color:#212121; text-decoration:none; font-weight:bold; }
-    nav a:hover { color:#D90416; }
-    main { padding:20px; max-width:600px; margin:auto; }
-    h1 { color:#D90416; margin-bottom:20px; text-align:center; }
-    form { display:flex; flex-direction:column; gap:15px; }
-    input, select, textarea { padding:10px; font-size:16px; border:1px solid #ccc; border-radius:5px; width:100%; }
-    button { background:#D90416; color:#fff; padding:12px; font-size:16px; border:none; border-radius:5px; cursor:pointer; }
-    button:hover { background:#F25C54; }
-    footer { background:#212121; color:#fff; padding:20px; text-align:center; margin-top:40px; }
-    footer a { color:#F25C54; text-decoration:none; margin:0 5px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Place Your Order | Irsa Foods</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+body { font-family: Arial; background:#fff; color:#212121; padding:0; margin:0; }
+header { display:flex; justify-content:space-between; align-items:center; padding:20px; border-bottom:1px solid #eee; }
+.logo { display:flex; align-items:center; }
+.logo img { height:50px; margin-right:10px; }
+.logo span { color:#D90416; font-size:24px; font-weight:bold; }
+nav a { margin:0 15px; color:#212121; text-decoration:none; font-weight:bold; }
+nav a:hover { color:#D90416; }
+main { padding:20px; max-width:600px; margin:auto; }
+h1 { color:#D90416; margin-bottom:20px; text-align:center; }
+form { display:flex; flex-direction:column; gap:15px; }
+input, select, textarea { padding:10px; font-size:16px; border:1px solid #ccc; border-radius:5px; width:100%; }
+button { background:#D90416; color:#fff; padding:12px; font-size:16px; border:none; border-radius:5px; cursor:pointer; }
+button:hover { background:#F25C54; }
+footer { background:#212121; color:#fff; padding:20px; text-align:center; margin-top:40px; }
+footer a { color:#F25C54; text-decoration:none; margin:0 5px; }
+</style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <img src="images/logo.png" alt="Irsa Foods Logo">
-    <span>Irsa Foods</span>
-  </div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="order.html">Order</a>
-    <a href="faq.html">FAQ</a>
-    <a href="contact.html">Contact</a>
-    <div class="dropdown">
-      <span>Policies</span>
-      <div class="dropdown-content">
-        <a href="policies/privacy-policy.html">Privacy Policy</a>
-        <a href="policies/terms.html">Terms</a>
-        <a href="policies/disclaimer.html">Disclaimer</a>
-      </div>
-    </div>
-  </nav>
+<div class="logo">
+<img src="images/logo.png" alt="Irsa Foods Logo">
+<span>Irsa Foods</span>
+</div>
+<nav>
+<a href="index.html">Home</a>
+<a href="order.html">Order</a>
+<a href="faq.html">FAQ</a>
+<a href="contact.html">Contact</a>
+<div class="dropdown">
+<span>Policies</span>
+<div class="dropdown-content">
+<a href="policies/privacy-policy.html">Privacy Policy</a>
+<a href="policies/terms.html">Terms</a>
+<a href="policies/disclaimer.html">Disclaimer</a>
+</div>
+</div>
+</nav>
 </header>
 
 <main>
-  <h1>Place Your Order</h1>
-  <p>Please fill in your details and select the products you want to order. <strong>PKR 200 upfront fee is required.</strong> The remaining amount will be collected on delivery.</p>
+<h1>Place Your Order</h1>
+<p>Please fill in your details and select the products you want to order. <strong>PKR 200 upfront fee is required.</strong> Remaining amount will be collected on delivery.</p>
 
-  <form id="order-form">
-    <input type="text" id="name" placeholder="Full Name" required>
-    <input type="tel" id="phone" placeholder="Phone Number" value="+923177910929" required>
-    <textarea id="address" placeholder="Delivery Address" rows="3" required></textarea>
+<form id="order-form">
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="tel" id="phone" placeholder="Phone Number" required>
+<textarea id="address" placeholder="Delivery Address" rows="3" required></textarea>
 
-    <label for="product">Select Product:</label>
-    <select id="product" required>
-      <option value="">-- Choose a product --</option>
-      <option value="BelVita Biscuits">BelVita Biscuits - PKR 150</option>
-      <option value="Lip Gloss">Lip Gloss - PKR 250</option>
-      <!-- Add more products here -->
-    </select>
+<label for="product">Select Product:</label>
+<select id="product" required>
+<option value="">-- Choose a product --</option>
+<option value="BelVita Biscuits">BelVita Biscuits - PKR 150</option>
+<option value="Lip Gloss">Lip Gloss - PKR 250</option>
+<!-- Add more products here -->
+</select>
 
-    <p>Upfront Fee: PKR 200</p>
-    <button type="submit">Place Order</button>
-  </form>
+<p>Upfront Fee: PKR 200</p>
+<button type="submit">Place Order</button>
+</form>
 
-  <p id="confirmation" style="margin-top:20px; font-weight:bold; color:#D90416;"></p>
+<p id="confirmation" style="margin-top:20px; font-weight:bold; color:#D90416;"></p>
 </main>
 
 <footer>
-  <p>Contact us: +923177910929</p>
-  <p>
-    <a href="policies/privacy-policy.html">Privacy Policy</a> | 
-    <a href="policies/terms.html">Terms</a> | 
-    <a href="policies/disclaimer.html">Disclaimer</a>
-  </p>
-  <div class="social-icons">
-    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-    <a href="#"><img src="images/twitter.png" alt="Twitter"></a>
-  </div>
+<p>Contact us: +923177910929</p>
+<p>
+<a href="policies/privacy-policy.html">Privacy Policy</a> | 
+<a href="policies/terms.html">Terms</a> | 
+<a href="policies/disclaimer.html">Disclaimer</a>
+</p>
 </footer>
 
 <script>
-  const form = document.getElementById('order-form');
-  const confirmation = document.getElementById('confirmation');
+const UPFRONT_FEE = 200;
+const form = document.getElementById('order-form');
+const confirmation = document.getElementById('confirmation');
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
+// Replace this with your Google Apps Script Web App URL
+const SHEET_ENDPOINT = "YOUR_GOOGLE_WEB_APP_URL";
 
-    const orderData = {
-      name: document.getElementById('name').value,
-      phone: document.getElementById('phone').value,
-      address: document.getElementById('address').value,
-      product: document.getElementById('product').value,
-      upfrontFee: 200,
-      codAmount: getProductPrice(document.getElementById('product').value) - 200
-    };
-
-    // Here you can replace with actual backend or payment gateway integration
-    console.log(orderData);
-
-    confirmation.textContent = `Thank you ${orderData.name}! Please pay PKR ${orderData.upfrontFee} now. Remaining PKR ${orderData.codAmount} will be collected on delivery.`;
-    form.reset();
-  });
-
-  function getProductPrice(productName) {
-    switch(productName) {
-      case "BelVita Biscuits": return 150;
-      case "Lip Gloss": return 250;
-      // Add more products here
-      default: return 0;
-    }
+function getProductPrice(productName){
+  switch(productName){
+    case "BelVita Biscuits": return 150;
+    case "Lip Gloss": return 250;
+    // Add more products here
+    default: return 0;
   }
+}
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const product = document.getElementById('product').value;
+  const price = getProductPrice(product);
+
+  const orderData = {
+    name, phone, address, product,
+    upfrontFee: Math.min(UPFRONT_FEE, price),
+    codAmount: Math.max(price - UPFRONT_FEE, 0)
+  };
+
+  // Send to Google Sheets
+  fetch(SHEET_ENDPOINT, {
+    method: 'POST',
+    body: JSON.stringify(orderData)
+  }).then(res=>res.json())
+    .then(data=>{
+      confirmation.textContent = `Thank you ${name}! Please pay PKR ${orderData.upfrontFee} now. Remaining PKR ${orderData.codAmount} will be collected on delivery.`;
+      form.reset();
+    })
+    .catch(err=>{
+      confirmation.textContent = "Something went wrong. Please try again.";
+      console.error(err);
+    });
+});
 </script>
 
 </body>
