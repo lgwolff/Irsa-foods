@@ -3,59 +3,203 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Irsa Foods</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Irsa Foods | Online Store</title>
+
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; font-family: Arial, sans-serif; }
-    body { background: #FFFFFF; color: #212121; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-    /* Header */
-    header { display:flex; justify-content: space-between; align-items:center; padding:20px; border-bottom:1px solid #eee; }
-    .logo { display:flex; align-items:center; }
-    .logo img { height:50px; margin-right:10px; }
-    .logo span { color:#D90416; font-size:24px; font-weight:bold; }
+    body {
+      background: #FFFFFF;
+      color: #212121;
+    }
 
-    nav a { margin:0 15px; color:#212121; text-decoration:none; font-weight:bold; }
-    nav a:hover { color:#D90416; }
+    /* ================= HEADER ================= */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
 
-    .dropdown { position: relative; display:inline-block; }
-    .dropdown-content { display:none; position:absolute; background-color:#fff; min-width:160px; box-shadow:0 8px 16px rgba(0,0,0,0.2); z-index:1; }
-    .dropdown-content a { color:#212121; padding:12px 16px; text-decoration:none; display:block; }
-    .dropdown:hover .dropdown-content { display:block; }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
 
-    main { padding:20px; }
+    .logo img {
+      height: 50px;
+      margin-right: 10px;
+    }
 
-    /* Promo Slider */
-    .slider { position: relative; overflow: hidden; margin-bottom:30px; }
-    .slides { display:flex; transition: transform 0.5s ease-in-out; }
-    .slides img { width:100%; height:auto; flex-shrink:0; border-radius:8px; }
+    .logo span {
+      color: #D90416;
+      font-size: 24px;
+      font-weight: bold;
+    }
 
-    /* Products Grid */
-    .products { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; }
-    .product { border:1px solid #eee; padding:15px; text-align:center; transition: transform 0.2s, box-shadow 0.2s; }
-    .product:hover { transform: scale(1.03); box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-    .product img { width:100%; height:auto; }
-    .product a { display:inline-block; margin-top:10px; background:#D90416; color:#fff; padding:8px 15px; text-decoration:none; border-radius:5px; }
-    .product a:hover { background:#F25C54; }
+    nav a,
+    nav span {
+      margin: 0 15px;
+      color: #212121;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-    /* Footer */
-    footer { background:#212121; color:#fff; padding:20px; text-align:center; }
-    footer a { color:#F25C54; text-decoration:none; margin:0 5px; }
-    footer .social-icons img { width:24px; height:24px; margin:0 5px; vertical-align:middle; }
+    nav a:hover,
+    nav span:hover {
+      color: #D90416;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      min-width: 160px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: #212121;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    /* ================= MAIN ================= */
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* ================= PROMO SLIDER ================= */
+    .slider {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 40px;
+      border-radius: 8px;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slides img {
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    /* ================= PRODUCTS GRID ================= */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .product {
+      border: 1px solid #eee;
+      padding: 16px;
+      text-align: center;
+      border-radius: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .product img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    .product h2 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .product p {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .product a {
+      display: inline-block;
+      background: #D90416;
+      color: #fff;
+      padding: 10px 18px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .product a:hover {
+      background: #F25C54;
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+      background: #212121;
+      color: #fff;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    footer p {
+      margin-bottom: 10px;
+    }
+
+    footer a {
+      color: #F25C54;
+      text-decoration: none;
+      margin: 0 6px;
+    }
+
+    .social-icons img {
+      width: 24px;
+      height: 24px;
+      margin: 0 6px;
+      vertical-align: middle;
+    }
   </style>
 </head>
+
 <body>
 
+<!-- ================= HEADER ================= -->
 <header>
   <div class="logo">
     <img src="images/logo.png" alt="Irsa Foods Logo">
     <span>Irsa Foods</span>
   </div>
+
   <nav>
     <a href="index.html">Home</a>
     <a href="order.html">Order</a>
     <a href="faq.html">FAQ</a>
     <a href="contact.html">Contact</a>
+
     <div class="dropdown">
       <span>Policies</span>
       <div class="dropdown-content">
@@ -67,30 +211,35 @@
   </nav>
 </header>
 
+<!-- ================= MAIN ================= -->
 <main>
 
-  <!-- Promo Slider -->
-  <div class="slider" id="promo-slider">
-    <div class="slides">
+  <!-- PROMO SLIDER -->
+  <div class="slider">
+    <div class="slides" id="slides">
       <img src="images/promo1.jpg" alt="Promo 1">
       <img src="images/promo2.jpg" alt="Promo 2">
       <img src="images/promo3.jpg" alt="Promo 3">
     </div>
   </div>
 
-  <!-- Products Grid -->
+  <!-- PRODUCTS GRID -->
   <section class="products" id="products-grid">
-    <!-- Products will be populated here dynamically -->
+    <!-- Products injected via JS -->
   </section>
+
 </main>
 
+<!-- ================= FOOTER ================= -->
 <footer>
-  <p>Contact us: +92 XXX XXX XXXX</p>
+  <p>Contact / WhatsApp: +92 317 7910929</p>
+
   <p>
-    <a href="policies/privacy-policy.html">Privacy Policy</a> | 
-    <a href="policies/terms.html">Terms</a> | 
+    <a href="policies/privacy-policy.html">Privacy Policy</a> |
+    <a href="policies/terms.html">Terms</a> |
     <a href="policies/disclaimer.html">Disclaimer</a>
   </p>
+
   <div class="social-icons">
     <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
     <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
@@ -98,33 +247,44 @@
   </div>
 </footer>
 
+<!-- ================= SCRIPTS ================= -->
 <script>
-  // Promo Slider Logic
+  /* -------- PROMO SLIDER -------- */
   let currentSlide = 0;
-  const slidesContainer = document.querySelector('.slides');
-  const totalSlides = slidesContainer.children.length;
+  const slides = document.getElementById("slides");
+  const totalSlides = slides.children.length;
 
   setInterval(() => {
     currentSlide = (currentSlide + 1) % totalSlides;
-    slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-  }, 4000); // 4 seconds per slide
+    slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+  }, 4000);
 
-  // Dynamic Product Loader
+  /* -------- PRODUCTS (CART-READY) -------- */
   const products = [
-    {name:"BelVita Biscuits", image:"images/belvita.jpg", price:"PKR 150", link:"order.html"},
-    {name:"Lip Gloss", image:"images/lip-gloss.jpg", price:"PKR 250", link:"order.html"}
-    // Add more products here
+    {
+      id: 1,
+      name: "BelVita Biscuits",
+      price: 150,
+      image: "images/belvita.jpg"
+    },
+    {
+      id: 2,
+      name: "Lip Gloss",
+      price: 250,
+      image: "images/lip-gloss.jpg"
+    }
   ];
 
-  const grid = document.getElementById('products-grid');
+  const grid = document.getElementById("products-grid");
+
   products.forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'product';
+    const div = document.createElement("div");
+    div.className = "product";
     div.innerHTML = `
       <img src="${p.image}" alt="${p.name}">
       <h2>${p.name}</h2>
-      <p>${p.price}</p>
-      <a href="${p.link}">Order Now</a>
+      <p>PKR ${p.price}</p>
+      <a href="order.html?add=${p.id}&qty=1">Order Now</a>
     `;
     grid.appendChild(div);
   });
