@@ -18,7 +18,11 @@
 
     .qty button { padding: 2px 8px; }
 
-    .summary { margin-top: 20px; border-top: 1px solid #eee; padding-top: 16px; }
+    .summary {
+      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 16px;
+    }
 
     input, textarea {
       width: 100%;
@@ -34,6 +38,7 @@
       border: none;
       cursor: pointer;
       width: 100%;
+      font-size: 16px;
     }
 
     footer {
@@ -70,7 +75,7 @@
     <input name="name" placeholder="Full Name" required>
     <input name="phone" placeholder="Phone Number" required>
     <textarea name="address" placeholder="Address" required></textarea>
-    <button>Place Order</button>
+    <button type="submit">Place Order</button>
   </form>
 
   <p><strong>Note:</strong> PKR 200 upfront will be requested via WhatsApp to secure delivery.</p>
@@ -85,26 +90,26 @@
   const DELIVERY = 299;
   const UPFRONT = 200;
   const TAX_RATE = 0.07;
-  const SCRIPT = "https://script.google.com/macros/s/AKfycbythDs2Wgo_VGC8TsQ1wX3UThTyJ5ASp8ZIHJs8HsFf-Ew3yjCu8aLE_WGvqrkf_8sw/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbythDs2Wgo_VGC8TsQ1wX3UThTyJ5ASp8ZIHJs8HsFf-Ew3yjCu8aLE_WGvqrkf_8sw/exec";
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartDiv = document.getElementById("cart");
 
-  function render() {
+  function renderCart() {
     cartDiv.innerHTML = "";
     let subtotal = 0;
 
-    cart.forEach((i, idx) => {
-      const line = i.price * i.qty;
+    cart.forEach((item, i) => {
+      const line = item.price * item.qty;
       subtotal += line;
 
       cartDiv.innerHTML += `
         <div class="cart-item">
-          <span>${i.name} x ${i.qty}</span>
+          <span>${item.name} x ${item.qty}</span>
           <span>
             PKR ${line}
-            <button onclick="changeQty(${idx},1)">+</button>
-            <button onclick="changeQty(${idx},-1)">-</button>
+            <button onclick="changeQty(${i},1)">+</button>
+            <button onclick="changeQty(${i},-1)">−</button>
           </span>
         </div>
       `;
@@ -118,33 +123,38 @@
     grandTotal.textContent = grand;
   }
 
-  function changeQty(i, d) {
-    cart[i].qty += d;
-    if (cart[i].qty <= 0) cart.splice(i, 1);
+  function changeQty(index, delta) {
+    cart[index].qty += delta;
+    if (cart[index].qty <= 0) cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
-    render();
+    renderCart();
   }
 
-  render();
+  renderCart();
 
-  orderForm.onsubmit = async e => {
+  document.getElementById("orderForm").addEventListener("submit", e => {
     e.preventDefault();
-    const f = e.target;
 
-    await fetch(SCRIPT, {
+    const form = e.target;
+
+    const payload = {
+      name: form.name.value,
+      phone: form.phone.value,
+      address: form.address.value,
+      order: JSON.stringify(cart),
+      upfront: UPFRONT
+    };
+
+    fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({
-        name: f.name.value,
-        address: f.address.value,
-        order: JSON.stringify(cart),
-        upfront: UPFRONT
-      })
+      mode: "no-cors",
+      body: JSON.stringify(payload)
     });
 
     localStorage.removeItem("cart");
-    alert("Order submitted. We will contact you on WhatsApp.");
-    location.href = "index.html";
-  };
+    alert("Order placed successfully. We will contact you on WhatsApp.");
+    window.location.href = "index.html";
+  });
 </script>
 
 </body>
