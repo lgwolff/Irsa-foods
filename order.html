@@ -3,158 +3,228 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Irsa Foods - Order</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Irsa Foods | Checkout</title>
+
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-  body{background:#fff;color:#212121;}
-  header, footer{background:#212121;color:#fff;padding:15px;text-align:center;}
-  header a, footer a{color:#F25C54;text-decoration:none;margin:0 5px;}
-  main{padding:20px;}
-  .cart-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
-  .cart-table th, .cart-table td{border:1px solid #eee;padding:10px;text-align:center;}
-  .quantity-btn{padding:2px 8px;margin:0 5px;cursor:pointer;}
-  .summary{margin-top:15px;font-size:18px;}
-  .btn-order{display:inline-block;margin-top:10px;padding:10px 20px;background:#D90416;color:#fff;border:none;border-radius:5px;cursor:pointer;}
-  .btn-order:hover{background:#F25C54;}
+:root{
+  --primary:#D90416;
+  --dark:#1e1e1e;
+  --light:#f7f7f7;
+  --border:#e5e5e5;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+
+body{background:var(--light);color:#222;min-height:100vh;display:flex;flex-direction:column;}
+
+header{
+  background:var(--dark);
+  color:#fff;
+  padding:16px;
+  text-align:center;
+}
+
+header h1{font-size:22px;font-weight:600;}
+
+main{
+  flex:1;
+  padding:20px;
+  max-width:900px;
+  margin:auto;
+  width:100%;
+}
+
+.section{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:16px;
+  margin-bottom:20px;
+}
+
+.cart-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.cart-table th{
+  background:#fafafa;
+  text-align:left;
+  font-size:14px;
+  padding:10px;
+  border-bottom:1px solid var(--border);
+}
+
+.cart-table td{
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+}
+
+.cart-table td:last-child{text-align:right;}
+
+.qty-btn{
+  padding:4px 10px;
+  border:1px solid var(--border);
+  background:#fff;
+  cursor:pointer;
+  border-radius:4px;
+}
+
+.qty-btn:hover{background:#f0f0f0;}
+
+.summary p{
+  display:flex;
+  justify-content:space-between;
+  margin:6px 0;
+  font-size:14px;
+}
+
+.summary strong{
+  font-size:16px;
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group label{
+  display:block;
+  font-size:13px;
+  margin-bottom:4px;
+  color:#555;
+}
+
+.form-group input{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  font-size:14px;
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  padding:12px 20px;
+  font-size:15px;
+  border-radius:6px;
+  cursor:pointer;
+  width:100%;
+}
+
+.btn-primary:hover{opacity:.9;}
+
+footer{
+  background:var(--dark);
+  color:#ccc;
+  text-align:center;
+  padding:14px;
+  font-size:13px;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-  <h1>Irsa Foods - Order</h1>
+  <h1>Irsa Foods — Secure Checkout</h1>
 </header>
 
 <main>
 
-<table class="cart-table" id="cart-table">
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th>Price</th>
-      <th>Qty</th>
-      <th>Total</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+<!-- CART -->
+<div class="section">
+  <h3 style="margin-bottom:12px;">Your Order</h3>
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="cart-body"></tbody>
+  </table>
+</div>
 
-<div class="summary" id="summary"></div>
+<!-- SUMMARY -->
+<div class="section summary" id="summary"></div>
 
-<form action="https://formsubmit.co/irslantariq59@gmail.com" method="POST" onsubmit="prepareOrder()">
-
-  <!-- FormSubmit controls -->
-  <input type="hidden" name="_subject" value="New Order - Irsa Foods">
+<!-- FORM -->
+<div class="section">
+<form action="https://formsubmit.co/irslantariq59@gmail.com" method="POST" onsubmit="prepareOrder(event)">
+  <input type="hidden" name="_subject" value="New Order — Irsa Foods">
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_template" value="table">
 
-  <!-- Order payload -->
-  <input type="hidden" name="Order Number" id="order_number">
-  <input type="hidden" name="Order Details" id="order_details">
-  <input type="hidden" name="Grand Total" id="grand_total">
+  <input type="hidden" name="Order Number" id="orderNo">
+  <input type="hidden" name="Order Items" id="orderItems">
+  <input type="hidden" name="Grand Total" id="orderTotal">
 
-  <!-- Customer inputs -->
-  <input type="text" name="Customer Name" id="name" placeholder="Your Name" required><br><br>
-  <input type="tel" name="Phone Number" id="phone" placeholder="Your WhatsApp Number" required><br><br>
-  <input type="text" name="Delivery Address" id="address" placeholder="Delivery Address" required><br><br>
+  <div class="form-group">
+    <label>Full Name</label>
+    <input type="text" name="Customer Name" required>
+  </div>
 
-  <button type="submit" class="btn-order">Place Order</button>
+  <div class="form-group">
+    <label>WhatsApp Number</label>
+    <input type="tel" name="Phone Number" required>
+  </div>
+
+  <div class="form-group">
+    <label>Delivery Address</label>
+    <input type="text" name="Delivery Address" required>
+  </div>
+
+  <button class="btn-primary" type="submit">Place Order</button>
 </form>
+</div>
 
 </main>
 
 <footer>
-  <p>Contact us: +923177910929</p>
+  © 2026 Irsa Foods · Contact: +923177910929
 </footer>
 
 <script>
-// PRODUCTS
-const products = [
-  {id:1,name:"BelVita Biscuits",price:150},
-  {id:2,name:"Lip Gloss",price:250}
+const cart=[
+  {name:"BelVita Biscuits",qty:1,price:150}
 ];
 
-let cart = [];
+function render(){
+  const body=document.getElementById("cart-body");
+  body.innerHTML="";
+  let total=0;
 
-// CART FUNCTIONS
-function addToCart(id){
-  const p = products.find(x=>x.id===id);
-  const c = cart.find(x=>x.id===id);
-  if(c){ c.qty++; c.total=c.qty*c.price; }
-  else{ cart.push({...p,qty:1,total:p.price}); }
-  renderCart();
-}
-
-function removeFromCart(id){
-  cart = cart.filter(x=>x.id!==id);
-  renderCart();
-}
-
-function changeQty(id,d){
-  const c = cart.find(x=>x.id===id);
-  if(!c) return;
-  c.qty += d;
-  if(c.qty<1) c.qty=1;
-  c.total=c.qty*c.price;
-  renderCart();
-}
-
-function renderCart(){
-  const tb=document.querySelector('#cart-table tbody');
-  tb.innerHTML='';
   cart.forEach(i=>{
-    tb.innerHTML+=`
-      <tr>
-        <td>${i.name}</td>
-        <td>PKR ${i.price}</td>
-        <td>${i.qty}</td>
-        <td>PKR ${i.total}</td>
-        <td>
-          <button class="quantity-btn" onclick="changeQty(${i.id},1)">+</button>
-          <button class="quantity-btn" onclick="changeQty(${i.id},-1)">-</button>
-          <button class="quantity-btn" onclick="removeFromCart(${i.id})">Remove</button>
-        </td>
-      </tr>`;
+    const row=document.createElement("tr");
+    row.innerHTML=`<td>${i.name}</td><td>${i.qty}</td><td>PKR ${i.qty*i.price}</td>`;
+    body.appendChild(row);
+    total+=i.qty*i.price;
   });
-  updateSummary();
+
+  const delivery=299, upfront=200, cod=Math.round((total+delivery)*0.07);
+  const grand=total+delivery+cod-upfront;
+
+  document.getElementById("summary").innerHTML=`
+    <p><span>Products</span><span>PKR ${total}</span></p>
+    <p><span>Delivery</span><span>PKR ${delivery}</span></p>
+    <p><span>COD Fee</span><span>PKR ${cod}</span></p>
+    <p><span>Upfront</span><span>- PKR ${upfront}</span></p>
+    <p><strong>Total</strong><strong>PKR ${grand}</strong></p>
+  `;
 }
 
-function updateSummary(){
-  const delivery=299, upfront=200, codRate=0.07;
-  const productsTotal=cart.reduce((s,c)=>s+c.total,0);
-  const cod=Math.round((productsTotal+delivery)*codRate);
-  const grand=productsTotal+delivery+cod-upfront;
-  document.getElementById('summary').innerHTML=`
-    Products Total: PKR ${productsTotal}<br>
-    Delivery Fee: PKR ${delivery}<br>
-    COD Fee (7%): PKR ${cod}<br>
-    Upfront Fee: PKR ${upfront}<br>
-    <strong>Grand Total: PKR ${grand}</strong>`;
+function prepareOrder(e){
+  const orderNo="IRSA-"+Date.now();
+  document.getElementById("orderNo").value=orderNo;
+  document.getElementById("orderItems").value=cart.map(i=>`${i.name} x ${i.qty}`).join(", ");
+  document.getElementById("orderTotal").value=document.querySelector(".summary strong:last-child").innerText;
 }
 
-function prepareOrder(){
-  if(cart.length===0){
-    alert("Cart is empty");
-    event.preventDefault();
-    return;
-  }
-
-  const orderNo = "IRSA-" + Date.now();
-  let details = cart.map(i =>
-    `${i.name} x ${i.qty} = PKR ${i.total}`
-  ).join(" | ");
-
-  const delivery=299, upfront=200, codRate=0.07;
-  const productsTotal=cart.reduce((s,c)=>s+c.total,0);
-  const grand=Math.round(productsTotal+delivery+((productsTotal+delivery)*codRate)-upfront);
-
-  document.getElementById("order_number").value = orderNo;
-  document.getElementById("order_details").value = details;
-  document.getElementById("grand_total").value = "PKR " + grand;
-}
-
-renderCart();
+render();
 </script>
 
 </body>
