@@ -10,20 +10,16 @@
   body{background:#fff;color:#212121;}
   header, footer{background:#212121;color:#fff;padding:15px;text-align:center;}
   header a, footer a{color:#F25C54;text-decoration:none;margin:0 5px;}
-  main{padding:20px; max-width:900px;margin:0 auto;}
-  .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:30px;}
-  .product-card{border:1px solid #eee;padding:10px;text-align:center;border-radius:8px;transition:0.2s;}
-  .product-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-  .product-card img{width:100%;height:150px;object-fit:contain;}
-  .product-card button{margin-top:10px;padding:8px 12px;background:#D90416;color:#fff;border:none;border-radius:5px;cursor:pointer;}
-  .product-card button:hover{background:#F25C54;}
+  main{padding:20px; max-width:900px;margin:auto;}
   .cart-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
   .cart-table th, .cart-table td{border:1px solid #eee;padding:10px;text-align:center;}
   .cart-table img{width:50px;height:auto;}
   .quantity-btn{padding:2px 8px;margin:0 5px;cursor:pointer;}
-  .summary{margin-top:15px;font-size:16px;}
+  .summary{margin-top:15px;font-size:18px;text-align:right;}
   .btn-order{display:inline-block;margin-top:10px;padding:10px 20px;background:#D90416;color:#fff;text-decoration:none;border-radius:5px;cursor:pointer;border:none;}
   .btn-order:hover{background:#F25C54;}
+  .toast{display:none;position:fixed;top:20px;right:20px;background:#212121;color:#fff;padding:15px 25px;border-radius:5px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;}
+  input, select{padding:8px;margin-bottom:10px;width:100%;border:1px solid #ccc;border-radius:5px;}
 </style>
 </head>
 <body>
@@ -34,12 +30,6 @@
 
 <main>
 
-  <!-- Products Grid -->
-  <div class="products-grid" id="products-grid">
-    <!-- Products dynamically loaded -->
-  </div>
-
-  <!-- Cart Table -->
   <table class="cart-table" id="cart-table">
     <thead>
       <tr>
@@ -47,25 +37,24 @@
         <th>Price</th>
         <th>Qty</th>
         <th>Total</th>
-        <th>Actions</th>
+        <th>Modify</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
   <div class="summary" id="summary">
-    <!-- Totals will appear here -->
+    <!-- Subtotal and fees will appear here -->
   </div>
 
-  <!-- Order Form -->
   <form id="order-form">
-    <input type="text" id="name" placeholder="Your Name" required><br><br>
-    <input type="tel" id="phone" placeholder="Your WhatsApp Number" required><br><br>
-    <input type="text" id="address" placeholder="Delivery Address" required><br><br>
+    <input type="text" id="name" placeholder="Your Name" required>
+    <input type="tel" id="phone" placeholder="WhatsApp Number" required>
+    <input type="text" id="address" placeholder="Delivery Address" required>
+    <input type="email" id="email" placeholder="Your Email (optional)">
     <button type="submit" class="btn-order">Place Order</button>
   </form>
 
-  <p id="order-success" style="color:green;margin-top:10px;"></p>
 </main>
 
 <footer>
@@ -77,69 +66,37 @@
   </div>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
-// Load products dynamically
-let products = [];
-fetch('products/products.json')
-.then(res => res.json())
-.then(data => {
-  products = data;
-  renderProducts();
-});
+// Load cart from localStorage
+let cart = JSON.parse(localStorage.getItem('irsa_cart') || '[]');
 
-function renderProducts(){
-  const grid = document.getElementById('products-grid');
-  grid.innerHTML = '';
-  products.forEach(p=>{
-    const div = document.createElement('div');
-    div.className = 'product-card';
-    div.innerHTML=`
-      <img src="${p.image}" alt="${p.name}">
-      <h3>${p.name}</h3>
-      <p>PKR ${p.price}</p>
-      <button onclick="addToCart(${p.id})">Add to Cart</button>
-      <button onclick="buyNow(${p.id})">Order Now</button>
-    `;
-    grid.appendChild(div);
-  });
-}
+// Add/update products dynamically from products.json if needed
+// (Assume index.html already populates cart)
 
-// CART LOGIC
-let cart = [];
-
-function addToCart(productId){
-  const product = products.find(p=>p.id===productId);
-  const cartItem = cart.find(c=>c.id===productId);
-  if(cartItem){ cartItem.qty++; cartItem.total = cartItem.qty*cartItem.price; }
-  else{ cart.push({...product, qty:1, total:product.price}); }
-  renderCart();
-}
-
-function buyNow(productId){
-  addToCart(productId);
-  window.scrollTo({top:document.getElementById('order-form').offsetTop, behavior:'smooth'});
-}
-
-function removeFromCart(productId){
-  cart = cart.filter(c=>c.id!==productId);
-  renderCart();
-}
-
+// CART FUNCTIONS
 function changeQty(productId, delta){
-  const item = cart.find(c=>c.id===productId);
+  const item = cart.find(p=>p.id===productId);
   if(item){
     item.qty += delta;
-    if(item.qty<1) item.qty = 1;
-    item.total = item.qty*item.price;
+    if(item.qty <1) item.qty=1;
+    item.total = item.qty * item.price;
     renderCart();
   }
 }
 
+function removeFromCart(productId){
+  cart = cart.filter(p=>p.id!==productId);
+  renderCart();
+}
+
 function renderCart(){
+  localStorage.setItem('irsa_cart', JSON.stringify(cart));
   const tbody = document.querySelector('#cart-table tbody');
   tbody.innerHTML='';
   cart.forEach(item=>{
-    const tr = document.createElement('tr');
+    const tr=document.createElement('tr');
     tr.innerHTML=`
       <td>${item.name}</td>
       <td>PKR ${item.price}</td>
@@ -161,51 +118,72 @@ function updateSummary(){
   const upfront = 200;
   const codFee = 0.07;
   const productsTotal = cart.reduce((sum,c)=>sum+c.total,0);
-  const codCharge = (productsTotal + deliveryFee)*codFee;
+  const codCharge = Math.round((productsTotal + deliveryFee)*codFee);
   const grandTotal = productsTotal + deliveryFee + codCharge - upfront;
   document.getElementById('summary').innerHTML=`
     Products Total: PKR ${productsTotal}<br>
     Delivery Fee: PKR ${deliveryFee}<br>
-    COD Fee (7%): PKR ${Math.round(codCharge)}<br>
+    COD Fee (7%): PKR ${codCharge}<br>
     Upfront Fee: PKR ${upfront}<br>
-    <strong>Grand Total: PKR ${Math.round(grandTotal)}</strong>
+    <strong>Grand Total: PKR ${grandTotal}</strong>
   `;
 }
 
-function generateOrderNumber(){ return 'IRSA-'+Date.now(); }
+// GENERATE ORDER NUMBER
+function generateOrderNumber(){
+  return 'IRSA-'+Date.now();
+}
 
-// Form Submission via Email (Formspree)
-document.getElementById('order-form').addEventListener('submit', function(e){
+// SHOW TOAST
+function showToast(msg){
+  const toast=document.getElementById('toast');
+  toast.innerText=msg;
+  toast.style.display='block';
+  setTimeout(()=>{toast.style.display='none';},5000);
+}
+
+// HANDLE FORM SUBMISSION
+document.getElementById('order-form').addEventListener('submit',async function(e){
   e.preventDefault();
-  if(cart.length===0){ alert('Cart is empty'); return; }
+  if(cart.length===0){ showToast('Your cart is empty'); return; }
 
   const orderData = {
     order_number: generateOrderNumber(),
     name: document.getElementById('name').value,
     phone: document.getElementById('phone').value,
     address: document.getElementById('address').value,
-    cart: cart,
-    grand_total: Math.round(cart.reduce((sum,c)=>sum+c.total,0)+299+((cart.reduce((sum,c)=>sum+c.total,0)+299)*0.07)-200)
+    email: document.getElementById('email').value || 'N/A',
+    cart: cart.map(c=>`${c.name} x ${c.qty} = PKR ${c.total}`).join('\n'),
+    grand_total: cart.reduce((sum,c)=>sum+c.total,0)+299 + Math.round((cart.reduce((sum,c)=>sum+c.total,0)+299)*0.07) - 200
   };
 
-  // Send order via email using Formspree
-  fetch('https://formspree.io/f/your_form_id', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(orderData)
-  })
-  .then(res => {
+  try{
+    const res = await fetch('https://formspree.io/f/xykkevzy',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        ...orderData,
+        _subject: `New Order: ${orderData.order_number}`,
+        _replyto: orderData.email,
+        _format: 'plain'
+      })
+    });
+
     if(res.ok){
-      document.getElementById('order-success').innerText=`Order placed successfully! Your order number: ${orderData.order_number}`;
-      cart = [];
-      renderCart();
-      setTimeout(()=>{ window.location.href = 'https://irsafoods.com'; }, 3000);
-    } else { alert('Error sending order.'); }
-  })
-  .catch(err=>alert('Error sending order: '+err));
+      showToast(`Order placed successfully! Your order number: ${orderData.order_number}`);
+      localStorage.removeItem('irsa_cart');
+      cart=[]; renderCart();
+      setTimeout(()=>{ window.location.href='https://irsafoods.com'; },5000);
+    }else{
+      showToast('Failed to send order. Try again.');
+    }
+
+  }catch(err){
+    showToast('Error sending order: '+err.message);
+  }
 });
 
-// Initial render
+// INITIAL RENDER
 renderCart();
 </script>
 
