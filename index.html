@@ -6,13 +6,15 @@
   <title>Irsa Foods</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Basic Reset */
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-
+    * { box-sizing: border-box; margin:0; padding:0; font-family: Arial, sans-serif; }
     body { background: #FFFFFF; color: #212121; }
 
+    /* Header */
     header { display:flex; justify-content: space-between; align-items:center; padding:20px; border-bottom:1px solid #eee; }
-    .logo { color:#D90416; font-size:24px; font-weight:bold; }
+    .logo { display:flex; align-items:center; }
+    .logo img { height:50px; margin-right:10px; }
+    .logo span { color:#D90416; font-size:24px; font-weight:bold; }
+
     nav a { margin:0 15px; color:#212121; text-decoration:none; font-weight:bold; }
     nav a:hover { color:#D90416; }
 
@@ -22,6 +24,13 @@
     .dropdown:hover .dropdown-content { display:block; }
 
     main { padding:20px; }
+
+    /* Promo Slider */
+    .slider { position: relative; overflow: hidden; margin-bottom:30px; }
+    .slides { display:flex; transition: transform 0.5s ease-in-out; }
+    .slides img { width:100%; height:auto; flex-shrink:0; border-radius:8px; }
+
+    /* Products Grid */
     .products { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; }
     .product { border:1px solid #eee; padding:15px; text-align:center; transition: transform 0.2s, box-shadow 0.2s; }
     .product:hover { transform: scale(1.03); box-shadow:0 4px 12px rgba(0,0,0,0.1); }
@@ -29,6 +38,7 @@
     .product a { display:inline-block; margin-top:10px; background:#D90416; color:#fff; padding:8px 15px; text-decoration:none; border-radius:5px; }
     .product a:hover { background:#F25C54; }
 
+    /* Footer */
     footer { background:#212121; color:#fff; padding:20px; text-align:center; }
     footer a { color:#F25C54; text-decoration:none; margin:0 5px; }
     footer .social-icons img { width:24px; height:24px; margin:0 5px; vertical-align:middle; }
@@ -37,7 +47,10 @@
 <body>
 
 <header>
-  <div class="logo">Irsa Foods</div>
+  <div class="logo">
+    <img src="images/logo.png" alt="Irsa Foods Logo">
+    <span>Irsa Foods</span>
+  </div>
   <nav>
     <a href="index.html">Home</a>
     <a href="order.html">Order</a>
@@ -55,12 +68,70 @@
 </header>
 
 <main>
+
+  <!-- Promo Slider -->
+  <div class="slider" id="promo-slider">
+    <div class="slides">
+      <img src="images/promo1.jpg" alt="Promo 1">
+      <img src="images/promo2.jpg" alt="Promo 2">
+      <img src="images/promo3.jpg" alt="Promo 3">
+    </div>
+  </div>
+
+  <!-- Products Grid -->
   <section class="products" id="products-grid">
     <!-- Products will be populated here dynamically -->
   </section>
 </main>
 
 <footer>
+  <p>Contact us: +92 XXX XXX XXXX</p>
+  <p>
+    <a href="policies/privacy-policy.html">Privacy Policy</a> | 
+    <a href="policies/terms.html">Terms</a> | 
+    <a href="policies/disclaimer.html">Disclaimer</a>
+  </p>
+  <div class="social-icons">
+    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
+    <a href="#"><img src="images/twitter.png" alt="Twitter"></a>
+  </div>
+</footer>
+
+<script>
+  // Promo Slider Logic
+  let currentSlide = 0;
+  const slidesContainer = document.querySelector('.slides');
+  const totalSlides = slidesContainer.children.length;
+
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+  }, 4000); // 4 seconds per slide
+
+  // Dynamic Product Loader
+  const products = [
+    {name:"BelVita Biscuits", image:"images/belvita.jpg", price:"PKR 150", link:"order.html"},
+    {name:"Lip Gloss", image:"images/lip-gloss.jpg", price:"PKR 250", link:"order.html"}
+    // Add more products here
+  ];
+
+  const grid = document.getElementById('products-grid');
+  products.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${p.image}" alt="${p.name}">
+      <h2>${p.name}</h2>
+      <p>${p.price}</p>
+      <a href="${p.link}">Order Now</a>
+    `;
+    grid.appendChild(div);
+  });
+</script>
+
+</body>
+</html><footer>
   <p>Contact us: +92 XXX XXX XXXX</p>
   <p>
     <a href="policies/privacy-policy.html">Privacy Policy</a> | 
