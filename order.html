@@ -72,16 +72,13 @@
 // Load cart from localStorage
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-// Add/update products dynamically from products.json if needed
-// (Assume index.html already populates cart)
-
 // CART FUNCTIONS
 function changeQty(productId, delta){
   const item = cart.find(p=>p.id===productId);
   if(item){
     item.qty += delta;
     if(item.qty <1) item.qty=1;
-    item.total = item.qty * item.price;
+    item.total = item.qty * Number(item.price);
     renderCart();
   }
 }
@@ -96,10 +93,12 @@ function renderCart(){
   const tbody = document.querySelector('#cart-table tbody');
   tbody.innerHTML='';
   cart.forEach(item=>{
+    // ensure numbers are correct
+    if(!item.total) item.total = item.qty * Number(item.price);
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td>${item.name}</td>
-      <td>PKR ${item.price}</td>
+      <td>PKR ${Number(item.price)}</td>
       <td>${item.qty}</td>
       <td>PKR ${item.total}</td>
       <td>
@@ -117,7 +116,7 @@ function updateSummary(){
   const deliveryFee = 299;
   const upfront = 200;
   const codFee = 0.07;
-  const productsTotal = cart.reduce((sum,c)=>sum+c.total,0);
+  const productsTotal = cart.reduce((sum,c)=>sum+(Number(c.total)||0),0);
   const codCharge = Math.round((productsTotal + deliveryFee)*codFee);
   const grandTotal = productsTotal + deliveryFee + codCharge - upfront;
   document.getElementById('summary').innerHTML=`
@@ -147,14 +146,19 @@ document.getElementById('order-form').addEventListener('submit',async function(e
   e.preventDefault();
   if(cart.length===0){ showToast('Your cart is empty'); return; }
 
+  const orderNumber = generateOrderNumber();
+  const productsTotal = cart.reduce((sum,c)=>sum+(Number(c.total)||0),0);
+  const codCharge = Math.round((productsTotal + 299)*0.07);
+  const grandTotal = productsTotal + 299 + codCharge - 200;
+
   const orderData = {
-    order_number: generateOrderNumber(),
-    name: document.getElementById('name').value,
-    phone: document.getElementById('phone').value,
-    address: document.getElementById('address').value,
-    email: document.getElementById('email').value || 'N/A',
-    cart: cart.map(c=>`${c.name} x ${c.qty} = PKR ${c.total}`).join('\n'),
-    grand_total: cart.reduce((sum,c)=>sum+c.total,0)+299 + Math.round((cart.reduce((sum,c)=>sum+c.total,0)+299)*0.07) - 200
+    "Order Number": orderNumber,
+    "Customer Name": document.getElementById('name').value,
+    "WhatsApp Number": document.getElementById('phone').value,
+    "Delivery Address": document.getElementById('address').value,
+    "Customer Email": document.getElementById('email').value || 'N/A',
+    "Cart Content": cart.map(c=>`${c.name} x ${c.qty} = PKR ${c.total}`).join('\n'),
+    "Grand Total": grandTotal
   };
 
   try{
@@ -163,14 +167,15 @@ document.getElementById('order-form').addEventListener('submit',async function(e
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         ...orderData,
-        _subject: `New Order: ${orderData.order_number}`,
-        _replyto: orderData.email,
+        _to: 'irslantariq59@gmail.com',
+        _subject: `New Order: ${orderNumber}`,
+        _replyto: orderData["Customer Email"],
         _format: 'plain'
       })
     });
 
     if(res.ok){
-      showToast(`Order placed successfully! Your order number: ${orderData.order_number}`);
+      showToast(`Order placed successfully! Your order number: ${orderNumber}`);
       localStorage.removeItem('cart');
       cart=[]; renderCart();
       setTimeout(()=>{ window.location.href='https://irsafoods.com'; },5000);
