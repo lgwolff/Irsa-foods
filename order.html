@@ -2,159 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Checkout | Irsa Foods</title>
+  <title>Place Order</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; }
-    header, footer { background: #fff; padding: 20px; border-bottom: 1px solid #eee; }
-    main { max-width: 900px; margin: 30px auto; background: #fff; padding: 24px; }
-
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .qty button { padding: 2px 8px; }
-
-    .summary {
-      margin-top: 20px;
-      border-top: 1px solid #eee;
-      padding-top: 16px;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      background: #D90416;
-      color: #fff;
-      padding: 12px;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      font-size: 16px;
-    }
-
-    footer {
-      background: #212121;
-      color: #fff;
-      text-align: center;
-      padding: 24px;
-    }
-
-    footer a { color: #F25C54; margin: 0 10px; }
-  </style>
 </head>
-
 <body>
 
-<header>
-  <strong>Irsa Foods – Checkout</strong>
-</header>
+<h2>Checkout</h2>
 
-<main>
-  <h2>Your Cart</h2>
-  <div id="cart"></div>
+<form id="orderForm">
+  <input required placeholder="Full Name" id="name"><br><br>
+  <input required placeholder="Phone" id="phone"><br><br>
+  <input required placeholder="City" id="city"><br><br>
+  <textarea required placeholder="Address" id="address"></textarea><br><br>
 
-  <div class="summary">
-    <p>Products Total: PKR <span id="productsTotal">0</span></p>
-    <p>Delivery Fee: PKR 299</p>
-    <p>COD Tax (7%): PKR <span id="codTax">0</span></p>
-    <p>Upfront (recorded): PKR 200</p>
-    <h3>Grand Total: PKR <span id="grandTotal">0</span></h3>
-  </div>
+  <button type="submit">Place Order</button>
+</form>
 
-  <h3>Delivery Details</h3>
-  <form id="orderForm">
-    <input name="name" placeholder="Full Name" required>
-    <input name="phone" placeholder="Phone Number" required>
-    <textarea name="address" placeholder="Address" required></textarea>
-    <button type="submit">Place Order</button>
-  </form>
-
-  <p><strong>Note:</strong> PKR 200 upfront will be requested via WhatsApp to secure delivery.</p>
-</main>
-
-<footer>
-  <p>WhatsApp: <a href="https://wa.me/923177910929">+92 317 7910929</a></p>
-  <p><a href="#">Instagram</a> | <a href="#">Facebook</a></p>
-</footer>
+<p id="status"></p>
 
 <script>
-  const DELIVERY = 299;
-  const UPFRONT = 200;
-  const TAX_RATE = 0.07;
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbythDs2Wgo_VGC8TsQ1wX3UThTyJ5ASp8ZIHJs8HsFf-Ew3yjCu8aLE_WGvqrkf_8sw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5MPPFe33xZ2rKIdf2NBwr0Hannr4bBBPo9Vdl7ryjEMi_nY-m_A71PnoHYR6Srrd7/exec";
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const cartDiv = document.getElementById("cart");
+document.getElementById("orderForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-  function renderCart() {
-    cartDiv.innerHTML = "";
-    let subtotal = 0;
-
-    cart.forEach((item, i) => {
-      const line = item.price * item.qty;
-      subtotal += line;
-
-      cartDiv.innerHTML += `
-        <div class="cart-item">
-          <span>${item.name} x ${item.qty}</span>
-          <span>
-            PKR ${line}
-            <button onclick="changeQty(${i},1)">+</button>
-            <button onclick="changeQty(${i},-1)">−</button>
-          </span>
-        </div>
-      `;
-    });
-
-    const tax = Math.round(subtotal * TAX_RATE);
-    const grand = subtotal + DELIVERY + tax - UPFRONT;
-
-    productsTotal.textContent = subtotal;
-    codTax.textContent = tax;
-    grandTotal.textContent = grand;
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (cart.length === 0) {
+    alert("Cart is empty");
+    return;
   }
 
-  function changeQty(index, delta) {
-    cart[index].qty += delta;
-    if (cart[index].qty <= 0) cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-  }
+  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const upfrontFee = 200;
+  const remainingCOD = total;
 
-  renderCart();
+  const payload = {
+    name: name.value,
+    phone: phone.value,
+    city: city.value,
+    address: address.value,
+    cart,
+    total,
+    upfrontFee,
+    remainingCOD
+  };
 
-  document.getElementById("orderForm").addEventListener("submit", e => {
-    e.preventDefault();
+  document.getElementById("status").innerText = "Placing order...";
 
-    const form = e.target;
-
-    const payload = {
-      name: form.name.value,
-      phone: form.phone.value,
-      address: form.address.value,
-      order: JSON.stringify(cart),
-      upfront: UPFRONT
-    };
-
-    fetch(SCRIPT_URL, {
+  try {
+    const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" }
     });
 
-    localStorage.removeItem("cart");
-    alert("Order placed successfully. We will contact you on WhatsApp.");
-    window.location.href = "index.html";
-  });
+    const result = await res.json();
+
+    if (result.status === "success") {
+      document.getElementById("status").innerText = "Order placed successfully!";
+      localStorage.removeItem("cart");
+    } else {
+      throw new Error(result.message);
+    }
+
+  } catch (err) {
+    document.getElementById("status").innerText = "Order failed. Check configuration.";
+    console.error(err);
+  }
+});
 </script>
 
 </body>
