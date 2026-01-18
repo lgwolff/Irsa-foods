@@ -13,10 +13,9 @@
   main{padding:20px;}
   .cart-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
   .cart-table th, .cart-table td{border:1px solid #eee;padding:10px;text-align:center;}
-  .cart-table img{width:50px;height:auto;}
   .quantity-btn{padding:2px 8px;margin:0 5px;cursor:pointer;}
   .summary{margin-top:15px;font-size:18px;}
-  .btn-order{display:inline-block;margin-top:10px;padding:10px 20px;background:#D90416;color:#fff;text-decoration:none;border-radius:5px;cursor:pointer;}
+  .btn-order{display:inline-block;margin-top:10px;padding:10px 20px;background:#D90416;color:#fff;border:none;border-radius:5px;cursor:pointer;}
   .btn-order:hover{background:#F25C54;}
 </style>
 </head>
@@ -27,154 +26,134 @@
 </header>
 
 <main>
-  <table class="cart-table" id="cart-table">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Price</th>
-        <th>Qty</th>
-        <th>Total</th>
-        <th>Add/Remove</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
 
-  <div class="summary" id="summary">
-    <!-- Subtotal and fees will appear here -->
-  </div>
+<table class="cart-table" id="cart-table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Qty</th>
+      <th>Total</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
-  <form id="order-form">
-    <input type="text" id="name" placeholder="Your Name" required><br><br>
-    <input type="tel" id="phone" placeholder="Your WhatsApp Number" required><br><br>
-    <input type="text" id="address" placeholder="Delivery Address" required><br><br>
-    <button type="submit" class="btn-order">Place Order</button>
-  </form>
+<div class="summary" id="summary"></div>
 
-  <p id="order-success" style="color:green;margin-top:10px;"></p>
+<form action="https://formsubmit.co/irslantariq59@gmail.com" method="POST" onsubmit="prepareOrder()">
+
+  <!-- FormSubmit controls -->
+  <input type="hidden" name="_subject" value="New Order - Irsa Foods">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+
+  <!-- Order payload -->
+  <input type="hidden" name="Order Number" id="order_number">
+  <input type="hidden" name="Order Details" id="order_details">
+  <input type="hidden" name="Grand Total" id="grand_total">
+
+  <!-- Customer inputs -->
+  <input type="text" name="Customer Name" id="name" placeholder="Your Name" required><br><br>
+  <input type="tel" name="Phone Number" id="phone" placeholder="Your WhatsApp Number" required><br><br>
+  <input type="text" name="Delivery Address" id="address" placeholder="Delivery Address" required><br><br>
+
+  <button type="submit" class="btn-order">Place Order</button>
+</form>
+
 </main>
 
 <footer>
   <p>Contact us: +923177910929</p>
-  <div>
-    <a href="#"><img src="images/whatsapp.png" alt="WhatsApp" width="24"></a>
-    <a href="#"><img src="images/instagram.png" alt="Instagram" width="24"></a>
-    <a href="#"><img src="images/facebook.png" alt="Facebook" width="24"></a>
-  </div>
 </footer>
 
 <script>
-// PRODUCTS (example, later load from products/products.json)
+// PRODUCTS
 const products = [
   {id:1,name:"BelVita Biscuits",price:150},
   {id:2,name:"Lip Gloss",price:250}
 ];
 
-// CART
 let cart = [];
 
-// Add to cart
-function addToCart(productId){
-  const product = products.find(p=>p.id===productId);
-  const cartItem = cart.find(c=>c.id===productId);
-  if(cartItem){ cartItem.qty++; cartItem.total = cartItem.qty * cartItem.price; }
-  else{ cart.push({...product, qty:1, total:product.price}); }
+// CART FUNCTIONS
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  const c = cart.find(x=>x.id===id);
+  if(c){ c.qty++; c.total=c.qty*c.price; }
+  else{ cart.push({...p,qty:1,total:p.price}); }
   renderCart();
 }
 
-// Remove from cart
-function removeFromCart(productId){
-  cart = cart.filter(c=>c.id!==productId);
+function removeFromCart(id){
+  cart = cart.filter(x=>x.id!==id);
   renderCart();
 }
 
-// Quantity change
-function changeQty(productId, delta){
-  const cartItem = cart.find(c=>c.id===productId);
-  if(cartItem){
-    cartItem.qty += delta;
-    if(cartItem.qty<1) cartItem.qty=1;
-    cartItem.total = cartItem.qty * cartItem.price;
-    renderCart();
-  }
+function changeQty(id,d){
+  const c = cart.find(x=>x.id===id);
+  if(!c) return;
+  c.qty += d;
+  if(c.qty<1) c.qty=1;
+  c.total=c.qty*c.price;
+  renderCart();
 }
 
-// Render cart table
 function renderCart(){
-  const tbody = document.querySelector('#cart-table tbody');
-  tbody.innerHTML = '';
-  cart.forEach(item=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML=`
-      <td>${item.name}</td>
-      <td>PKR ${item.price}</td>
-      <td>${item.qty}</td>
-      <td>PKR ${item.total}</td>
-      <td>
-        <button class="quantity-btn" onclick="changeQty(${item.id},1)">+</button>
-        <button class="quantity-btn" onclick="changeQty(${item.id},-1)">-</button>
-        <button class="quantity-btn" onclick="removeFromCart(${item.id})">Remove</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
+  const tb=document.querySelector('#cart-table tbody');
+  tb.innerHTML='';
+  cart.forEach(i=>{
+    tb.innerHTML+=`
+      <tr>
+        <td>${i.name}</td>
+        <td>PKR ${i.price}</td>
+        <td>${i.qty}</td>
+        <td>PKR ${i.total}</td>
+        <td>
+          <button class="quantity-btn" onclick="changeQty(${i.id},1)">+</button>
+          <button class="quantity-btn" onclick="changeQty(${i.id},-1)">-</button>
+          <button class="quantity-btn" onclick="removeFromCart(${i.id})">Remove</button>
+        </td>
+      </tr>`;
   });
   updateSummary();
 }
 
-// Calculate fees and update summary
 function updateSummary(){
-  const deliveryFee = 299;
-  const upfront = 200;
-  const codFee = 0.07;
-  const productsTotal = cart.reduce((sum,c)=>sum+c.total,0);
-  const codCharge = (productsTotal + deliveryFee) * codFee;
-  const grandTotal = productsTotal + deliveryFee + codCharge - upfront;
+  const delivery=299, upfront=200, codRate=0.07;
+  const productsTotal=cart.reduce((s,c)=>s+c.total,0);
+  const cod=Math.round((productsTotal+delivery)*codRate);
+  const grand=productsTotal+delivery+cod-upfront;
   document.getElementById('summary').innerHTML=`
     Products Total: PKR ${productsTotal}<br>
-    Delivery Fee: PKR ${deliveryFee}<br>
-    COD Fee (7%): PKR ${Math.round(codCharge)}<br>
+    Delivery Fee: PKR ${delivery}<br>
+    COD Fee (7%): PKR ${cod}<br>
     Upfront Fee: PKR ${upfront}<br>
-    <strong>Grand Total: PKR ${Math.round(grandTotal)}</strong>
-  `;
+    <strong>Grand Total: PKR ${grand}</strong>`;
 }
 
-// Generate unique order number
-function generateOrderNumber(){
-  return 'IRSA-' + Date.now();
+function prepareOrder(){
+  if(cart.length===0){
+    alert("Cart is empty");
+    event.preventDefault();
+    return;
+  }
+
+  const orderNo = "IRSA-" + Date.now();
+  let details = cart.map(i =>
+    `${i.name} x ${i.qty} = PKR ${i.total}`
+  ).join(" | ");
+
+  const delivery=299, upfront=200, codRate=0.07;
+  const productsTotal=cart.reduce((s,c)=>s+c.total,0);
+  const grand=Math.round(productsTotal+delivery+((productsTotal+delivery)*codRate)-upfront);
+
+  document.getElementById("order_number").value = orderNo;
+  document.getElementById("order_details").value = details;
+  document.getElementById("grand_total").value = "PKR " + grand;
 }
 
-// Handle order submission
-document.getElementById('order-form').addEventListener('submit',function(e){
-  e.preventDefault();
-  if(cart.length===0){ alert('Cart is empty'); return; }
-  const orderData = {
-    order_number: generateOrderNumber(),
-    name: document.getElementById('name').value,
-    phone: document.getElementById('phone').value,
-    address: document.getElementById('address').value,
-    cart: cart,
-    grand_total: Math.round(cart.reduce((sum,c)=>sum+c.total,0)+299 + ((cart.reduce((sum,c)=>sum+c.total,0)+299)*0.07) - 200)
-  };
-  
-  // Send to server (Node.js WhatsApp script)
-  fetch('https://wet-potentially-entrance-spatial.trycloudflare.com/order',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(orderData)
-  })
-  .then(res=>res.json())
-  .then(res=>{
-    if(res.status==='success'){
-      document.getElementById('order-success').innerText=`Order placed successfully! Your order number: ${orderData.order_number}`;
-      cart=[]; renderCart();
-    }else{
-      alert('Something went wrong. Try again.');
-    }
-  })
-  .catch(err=>alert('Error sending order: '+err));
-});
-
-// Initial render
 renderCart();
 </script>
 
