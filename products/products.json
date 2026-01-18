@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "BelVita Biscuits",
+    "price": 150,
+    "image": "images/product1.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Lip Gloss",
+    "price": 250,
+    "image": "images/product2.jpg"
+  }
+]
