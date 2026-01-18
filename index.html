@@ -131,42 +131,4 @@
 </script>
 
 </body>
-</html><footer>
-  <p>Contact us: +92 XXX XXX XXXX</p>
-  <p>
-    <a href="policies/privacy-policy.html">Privacy Policy</a> | 
-    <a href="policies/terms.html">Terms</a> | 
-    <a href="policies/disclaimer.html">Disclaimer</a>
-  </p>
-  <div class="social-icons">
-    <a href="#"><img src="images/facebook.png" alt="Facebook"></a>
-    <a href="#"><img src="images/instagram.png" alt="Instagram"></a>
-    <a href="#"><img src="images/twitter.png" alt="Twitter"></a>
-  </div>
-</footer>
-
-<script>
-  // Dynamic Product Loader
-  // You must maintain a JS array of products (name, image, price, link)
-  const products = [
-    {name:"BelVita Biscuits", image:"images/belvita.jpg", price:"PKR 150", link:"order.html"},
-    {name:"Lip Gloss", image:"images/lip-gloss.jpg", price:"PKR 250", link:"order.html"}
-    // Add more products here as you upload images
-  ];
-
-  const grid = document.getElementById('products-grid');
-  products.forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'product';
-    div.innerHTML = `
-      <img src="${p.image}" alt="${p.name}">
-      <h2>${p.name}</h2>
-      <p>${p.price}</p>
-      <a href="${p.link}">Order Now</a>
-    `;
-    grid.appendChild(div);
-  });
-</script>
-
-</body>
 </html>
