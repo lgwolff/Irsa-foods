@@ -2,57 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Place Order | Irsa Foods</title>
+  <title>Checkout | Irsa Foods</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      margin: 0;
-      padding: 0;
-      color: #212121;
-    }
-
-    header, footer {
-      background: #fff;
-      padding: 20px;
-      border-bottom: 1px solid #eee;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo img {
-      height: 40px;
-      margin-right: 10px;
-    }
-
-    .logo span {
-      font-size: 22px;
-      font-weight: bold;
-      color: #D90416;
-    }
-
-    main {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 6px;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-    }
+    body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; }
+    header, footer { background: #fff; padding: 20px; border-bottom: 1px solid #eee; }
+    main { max-width: 900px; margin: 30px auto; background: #fff; padding: 24px; }
 
     .cart-item {
       display: flex;
@@ -60,160 +16,135 @@
       margin-bottom: 10px;
     }
 
-    .summary {
-      margin-top: 20px;
-      border-top: 1px solid #eee;
-      padding-top: 15px;
-    }
+    .qty button { padding: 2px 8px; }
 
-    .summary p {
-      margin: 6px 0;
-    }
+    .summary { margin-top: 20px; border-top: 1px solid #eee; padding-top: 16px; }
 
-    form input, form textarea {
+    input, textarea {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
       border: 1px solid #ccc;
-      border-radius: 4px;
     }
 
     button {
       background: #D90416;
       color: #fff;
-      padding: 12px 20px;
+      padding: 12px;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background: #F25C54;
+      width: 100%;
     }
 
     footer {
       background: #212121;
       color: #fff;
       text-align: center;
-      margin-top: 40px;
+      padding: 24px;
     }
 
-    footer a {
-      color: #F25C54;
-      text-decoration: none;
-      margin: 0 6px;
-    }
-
-    .social-icons img {
-      width: 24px;
-      margin: 0 6px;
-    }
+    footer a { color: #F25C54; margin: 0 10px; }
   </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">
-    <img src="images/logo.png">
-    <span>Irsa Foods</span>
-  </div>
+  <strong>Irsa Foods – Checkout</strong>
 </header>
 
 <main>
-
-  <h1>Cart Summary</h1>
+  <h2>Your Cart</h2>
   <div id="cart"></div>
 
   <div class="summary">
-    <p><strong>Products Total:</strong> PKR <span id="productsTotal">0</span></p>
-    <p><strong>COD / Delivery Fee:</strong> PKR 200</p>
-    <p><strong>Total Payable on Delivery:</strong> PKR <span id="grandTotal">0</span></p>
+    <p>Products Total: PKR <span id="productsTotal">0</span></p>
+    <p>Delivery Fee: PKR 299</p>
+    <p>COD Tax (7%): PKR <span id="codTax">0</span></p>
+    <p>Upfront (recorded): PKR 200</p>
+    <h3>Grand Total: PKR <span id="grandTotal">0</span></h3>
   </div>
 
-  <h2>Customer Details</h2>
-
+  <h3>Delivery Details</h3>
   <form id="orderForm">
-    <input type="text" name="name" placeholder="Full Name" required>
-    <input type="tel" name="phone" placeholder="Phone Number" required>
-    <textarea name="address" placeholder="Delivery Address" required></textarea>
-    <button type="submit">Place Order</button>
+    <input name="name" placeholder="Full Name" required>
+    <input name="phone" placeholder="Phone Number" required>
+    <textarea name="address" placeholder="Address" required></textarea>
+    <button>Place Order</button>
   </form>
 
+  <p><strong>Note:</strong> PKR 200 upfront will be requested via WhatsApp to secure delivery.</p>
 </main>
 
 <footer>
-  <p>Contact / WhatsApp: +92 317 7910929</p>
-
-  <div class="social-icons">
-    <a href="#"><img src="images/facebook.png"></a>
-    <a href="#"><img src="images/instagram.png"></a>
-    <a href="#"><img src="images/twitter.png"></a>
-  </div>
+  <p>WhatsApp: <a href="https://wa.me/923177910929">+92 317 7910929</a></p>
+  <p><a href="#">Instagram</a> | <a href="#">Facebook</a></p>
 </footer>
 
 <script>
-  const COD_FEE = 200;
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbythDs2Wgo_VGC8TsQ1wX3UThTyJ5ASp8ZIHJs8HsFf-Ew3yjCu8aLE_WGvqrkf_8sw/exec";
+  const DELIVERY = 299;
+  const UPFRONT = 200;
+  const TAX_RATE = 0.07;
+  const SCRIPT = "https://script.google.com/macros/s/AKfycbythDs2Wgo_VGC8TsQ1wX3UThTyJ5ASp8ZIHJs8HsFf-Ew3yjCu8aLE_WGvqrkf_8sw/exec";
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
   const cartDiv = document.getElementById("cart");
-  const productsTotalEl = document.getElementById("productsTotal");
-  const grandTotalEl = document.getElementById("grandTotal");
 
-  function renderCart() {
+  function render() {
     cartDiv.innerHTML = "";
-    let total = 0;
+    let subtotal = 0;
 
-    cart.forEach(item => {
-      const line = item.price * item.qty;
-      total += line;
+    cart.forEach((i, idx) => {
+      const line = i.price * i.qty;
+      subtotal += line;
 
       cartDiv.innerHTML += `
         <div class="cart-item">
-          <span>${item.name} x ${item.qty}</span>
-          <span>PKR ${line}</span>
+          <span>${i.name} x ${i.qty}</span>
+          <span>
+            PKR ${line}
+            <button onclick="changeQty(${idx},1)">+</button>
+            <button onclick="changeQty(${idx},-1)">-</button>
+          </span>
         </div>
       `;
     });
 
-    productsTotalEl.textContent = total;
-    grandTotalEl.textContent = total + COD_FEE;
+    const tax = Math.round(subtotal * TAX_RATE);
+    const grand = subtotal + DELIVERY + tax - UPFRONT;
+
+    productsTotal.textContent = subtotal;
+    codTax.textContent = tax;
+    grandTotal.textContent = grand;
   }
 
-  renderCart();
+  function changeQty(i, d) {
+    cart[i].qty += d;
+    if (cart[i].qty <= 0) cart.splice(i, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    render();
+  }
 
-  document.getElementById("orderForm").addEventListener("submit", async e => {
+  render();
+
+  orderForm.onsubmit = async e => {
     e.preventDefault();
+    const f = e.target;
 
-    const form = e.target;
+    await fetch(SCRIPT, {
+      method: "POST",
+      body: JSON.stringify({
+        name: f.name.value,
+        address: f.address.value,
+        order: JSON.stringify(cart),
+        upfront: UPFRONT
+      })
+    });
 
-    const payload = {
-      name: form.name.value,
-      phone: form.phone.value,
-      address: form.address.value,
-      cart: JSON.stringify(cart),
-      productsTotal: productsTotalEl.textContent,
-      codFee: COD_FEE,
-      grandTotal: grandTotalEl.textContent
-    };
-
-    try {
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-
-      localStorage.removeItem("cart");
-      alert("Order placed successfully!");
-      window.location.href = "index.html";
-
-    } catch {
-      alert("Something went wrong. Please try again.");
-    }
-  });
+    localStorage.removeItem("cart");
+    alert("Order submitted. We will contact you on WhatsApp.");
+    location.href = "index.html";
+  };
 </script>
 
 </body>
