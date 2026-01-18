@@ -157,7 +157,7 @@ document.getElementById('order-form').addEventListener('submit',function(e){
   };
   
   // Send to server (Node.js WhatsApp script)
-  fetch('http://localhost:3000/order',{
+  fetch('https://wet-potentially-entrance-spatial.trycloudflare.com/order',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify(orderData)
