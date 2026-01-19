@@ -12,10 +12,12 @@
     /* HEADER */
     header {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       padding: 16px 24px;
       border-bottom: 1px solid #eee;
+      background: #fff;
     }
 
     .logo {
@@ -27,25 +29,47 @@
     .logo img { height: 48px; }
     .logo span { font-size: 22px; font-weight: bold; color: #D90416; }
 
-    nav a {
-      margin: 0 10px;
+    nav.main-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    nav.main-nav a {
       text-decoration: none;
       font-weight: bold;
       color: #212121;
+      padding: 6px 10px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
     }
 
-    nav a:hover { color: #D90416; }
+    nav.main-nav a:hover {
+      background: #D90416;
+      color: #fff;
+    }
+
+    .cart-icon a {
+      font-weight: bold;
+      color: #212121;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #D90416;
+      transition: all 0.2s;
+    }
+
+    .cart-icon a:hover {
+      background: #D90416;
+      color: #fff;
+    }
 
     .search-bar input {
       padding: 8px 12px;
       width: 220px;
       border: 1px solid #ccc;
       border-radius: 4px;
-    }
-
-    .cart-icon {
-      font-weight: bold;
-      cursor: pointer;
     }
 
     /* SLIDER */
@@ -106,9 +130,13 @@
 
     footer a {
       color: #F25C54;
-      margin: 0 10px;
+      margin: 0 6px;
       text-decoration: none;
     }
+
+    footer a:hover { text-decoration: underline; }
+    footer .social-icons { margin-top: 12px; }
+    footer .social-icons a { margin: 0 5px; }
   </style>
 </head>
 
@@ -116,7 +144,7 @@
 
 <header>
   <div class="logo">
-    <img src="images/logo.png">
+    <img src="images/logo.png" alt="Irsa Foods Logo">
     <span>Irsa Foods</span>
   </div>
 
@@ -124,9 +152,16 @@
     <input type="text" id="search" placeholder="Search products">
   </div>
 
-  <nav>
+  <nav class="main-nav">
     <a href="index.html">Home</a>
     <a href="order.html">Cart (<span id="cartCount">0</span>)</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+    <a href="authenticity.html">Authenticity</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms.html">Terms & Conditions</a>
+    <a href="refund-policy.html">Refund Policy</a>
   </nav>
 </header>
 
@@ -143,11 +178,21 @@
 </main>
 
 <footer>
-  <p>WhatsApp: <a href="https://wa.me/923177910929">+92 317 7910929</a></p>
-  <p>
-    <a href="#">Instagram</a> |
-    <a href="#">Facebook</a>
-  </p>
+  <div class="footer-links">
+    <a href="faq.html">FAQ</a> |
+    <a href="contact.html">Contact</a> |
+    <a href="authenticity.html">Authenticity</a> |
+    <a href="disclaimer.html">Disclaimer</a> |
+    <a href="privacy-policy.html">Privacy Policy</a> |
+    <a href="terms.html">Terms & Conditions</a> |
+    <a href="refund-policy.html">Refund Policy</a>
+  </div>
+  <p>Contact us: +92 317 7910929 | WhatsApp: <a href="https://wa.me/923177910929">+92 317 7910929</a></p>
+  <div class="social-icons">
+    <a href="#"><img src="images/whatsapp.png" alt="WhatsApp" width="24"></a>
+    <a href="#"><img src="images/instagram.png" alt="Instagram" width="24"></a>
+    <a href="#"><img src="images/facebook.png" alt="Facebook" width="24"></a>
+  </div>
 </footer>
 
 <script>
