@@ -259,7 +259,11 @@
       <div class="product" style="position:relative;">
         ${discountBadge}
         <img src="${p.images ? p.images[0] : p.image}" alt="${p.name}">
-        <h3>${p.name}</h3>
+        <h3>
+          <a href="product.html?id=${p.id}" style="color:#212121; text-decoration:none;">
+            ${p.name}
+          </a>
+        </h3>
         <p style="font-weight:bold;">PKR ${p.price}</p>
         ${descriptionText}
         <p style="font-size:13px;color:#666;">${ratingText} | Sold: ${p.sold || 0}</p>
