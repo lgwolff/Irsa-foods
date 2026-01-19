@@ -234,33 +234,27 @@
   grid.innerHTML = "";
 
   list.forEach(p => {
-    // Determine discount badge
     const discountBadge = p.discount ? `<div style="position:absolute;top:10px;left:10px;background:#D90416;color:#fff;padding:4px 6px;border-radius:4px;font-size:12px;">-${p.discount}</div>` : "";
 
-    // Determine stock status
     let stockText = "In Stock";
-    let stockColor = "#28a745"; // green
+    let stockColor = "#28a745";
     if(p.stock === 0 || p.stock === "0" || p.stock.toString().toLowerCase() === "out of stock") {
       stockText = "Out of Stock";
-      stockColor = "#dc3545"; // red
+      stockColor = "#dc3545";
     } else if(p.stock < 5) {
       stockText = "Limited Stock";
-      stockColor = "#ffc107"; // yellow
+      stockColor = "#ffc107";
     }
 
-    // Rating display
     const ratingText = p.rating ? `⭐ ${p.rating}` : "";
-
-    // Short description
     const descriptionText = p.description ? `<p style="font-size:14px;color:#555;margin:6px 0;">${p.description}</p>` : "";
 
-    // Product card
     grid.innerHTML += `
       <div class="product" style="position:relative;">
         ${discountBadge}
         <img src="${p.images ? p.images[0] : p.image}" alt="${p.name}">
         <h3>
-          <a href="product.html?id=${p.id}" style="color:#212121; text-decoration:none;">
+          <a href="product.html?id=${encodeURIComponent(p.id)}" style="color:#212121; text-decoration:none;">
             ${p.name}
           </a>
         </h3>
