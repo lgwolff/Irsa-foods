@@ -3,12 +3,28 @@
     "id": 1,
     "name": "BelVita Biscuits",
     "price": 150,
-    "image": "images/product1.jpg"
+    "images": [
+      "images/products/belvita1.jpg",
+      "images/products/belvita2.jpg"
+    ],
+    "description": "Healthy breakfast biscuits made with whole grains.",
+    "rating": "4.5",
+    "sold": 120,
+    "stock": "In Stock",
+    "discount": "10%"
   },
   {
     "id": 2,
     "name": "Lip Gloss",
     "price": 250,
-    "image": "images/product2.jpg"
+    "images": [
+      "images/products/lipgloss1.jpg",
+      "images/products/lipgloss2.jpg"
+    ],
+    "description": "Glossy lip color with long-lasting shine.",
+    "rating": "4.8",
+    "sold": 75,
+    "stock": 50,
+    "discount": null
   }
 ]
