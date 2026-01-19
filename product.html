@@ -11,8 +11,12 @@
   header a, footer a { color:#F25C54; text-decoration:none; margin:0 5px; }
   main { max-width:900px; margin:auto; padding:20px; }
   .product-container { display:flex; flex-wrap:wrap; gap:20px; }
-  .product-images { flex:1 1 300px; }
-  .product-images img { width:100%; border-radius:8px; }
+  .product-images { flex:1 1 300px; position:relative; overflow:hidden; border-radius:8px; }
+  .product-images img { width:100%; border-radius:8px; display:block; }
+  .arrow { position:absolute; top:50%; transform:translateY(-50%); background:#212121; color:#fff; padding:10px; cursor:pointer; border-radius:50%; opacity:0.8; }
+  .arrow:hover { opacity:1; }
+  .arrow-left { left:10px; }
+  .arrow-right { right:10px; }
   .product-info { flex:1 1 400px; }
   .product-info h1 { font-size:24px; margin-bottom:10px; }
   .product-info p { margin:6px 0; }
@@ -22,7 +26,7 @@
   .add-cart { background:#212121; color:#fff; }
   .buy-now { background:#D90416; color:#fff; }
   .toast { display:none; position:fixed; top:20px; right:20px; background:#212121; color:#fff; padding:15px 25px; border-radius:5px; z-index:9999; }
-  .discount-badge { position:absolute; top:10px; left:10px; background:#D90416; color:#fff; padding:4px 6px; border-radius:4px; font-size:12px; }
+  .discount-badge { position:absolute; top:10px; left:10px; background:#D90416; color:#fff; padding:4px 6px; border-radius:4px; font-size:12px; z-index:10; }
 </style>
 </head>
 <body>
@@ -88,6 +92,10 @@ function addToCart(product, qty=1){
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
+// Slider state
+let currentImageIndex = 0;
+let imageElements = [];
+
 fetch("products/products.json")
   .then(r => r.json())
   .then(data => {
@@ -97,13 +105,9 @@ fetch("products/products.json")
       return;
     }
 
-    // Images slider (use first image or all images)
-    let imagesHtml = '';
-    if(product.images && product.images.length>1){
-      imagesHtml = product.images.map(src=>`<img src="${src}">`).join('');
-    } else {
-      imagesHtml = `<img src="${product.images ? product.images[0] : product.image}">`;
-    }
+    // Images array
+    const images = product.images && product.images.length ? product.images : [product.image];
+    currentImageIndex = 0;
 
     // Discount badge
     const discountBadge = product.discount ? `<div class="discount-badge">-${product.discount}</div>` : "";
@@ -114,11 +118,15 @@ fetch("products/products.json")
       stockText="Out of Stock"; stockColor="#dc3545";
     } else if(product.stock <5){ stockText="Limited Stock"; stockColor="#ffc107"; }
 
+    // Build slider HTML
+    let sliderHtml = `<div class="product-images" style="position:relative;">${discountBadge}`;
+    images.forEach((src, i)=>{
+      sliderHtml += `<img src="${src}" style="display:${i===0?'block':'none'}">`;
+    });
+    sliderHtml += `<div class="arrow arrow-left">&#10094;</div><div class="arrow arrow-right">&#10095;</div></div>`;
+
     const productHtml = `
-      <div class="product-images" style="position:relative;">
-        ${discountBadge}
-        ${imagesHtml}
-      </div>
+      ${sliderHtml}
       <div class="product-info">
         <h1>${product.name}</h1>
         <p class="price">PKR ${product.price}</p>
@@ -130,6 +138,38 @@ fetch("products/products.json")
       </div>
     `;
     document.getElementById("product").innerHTML=productHtml;
+
+    // Setup slider logic
+    const sliderContainer = document.querySelector(".product-images");
+    imageElements = Array.from(sliderContainer.querySelectorAll("img"));
+
+    function showImage(index){
+      imageElements.forEach((img,i)=>img.style.display=i===index?'block':'none');
+    }
+
+    sliderContainer.querySelector(".arrow-left").addEventListener("click", ()=>{
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      showImage(currentImageIndex);
+    });
+    sliderContainer.querySelector(".arrow-right").addEventListener("click", ()=>{
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      showImage(currentImageIndex);
+    });
+
+    // Touch/swipe support
+    let startX = 0;
+    sliderContainer.addEventListener("touchstart", e=>{ startX = e.touches[0].clientX; });
+    sliderContainer.addEventListener("touchend", e=>{
+      let endX = e.changedTouches[0].clientX;
+      if(endX - startX > 50){ // swipe right
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        showImage(currentImageIndex);
+      } else if(startX - endX > 50){ // swipe left
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        showImage(currentImageIndex);
+      }
+    });
+
   });
 
 updateCartCount();
