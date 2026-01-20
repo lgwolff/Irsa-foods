@@ -191,13 +191,22 @@
   let allProducts = [];
 
   fetch("product/products.json")
-    .then(r => r.json())
-    .then(data => {
-      allProducts = data.products;
-      renderProducts(data.products);
-    })
-    .catch(err => console.error("Product load failed:", err));
+  .then(r => r.json())
+  .then(data => {
+    // SUPPORT BOTH FORMATS:
+    // 1) Array directly
+    // 2) { products: [...] }
 
+    allProducts = Array.isArray(data) ? data : data.products;
+
+    if (!Array.isArray(allProducts)) {
+      console.error("Invalid products.json format", data);
+      return;
+    }
+
+    renderProducts(allProducts);
+  })
+  .catch(err => console.error("Product load failed:", err));
   function renderProducts(list) {
     const grid = document.getElementById("products");
     grid.innerHTML = "";
