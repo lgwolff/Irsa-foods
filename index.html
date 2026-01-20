@@ -50,21 +50,6 @@
       color: #fff;
     }
 
-    .cart-icon a {
-      font-weight: bold;
-      color: #212121;
-      text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-      border: 1px solid #D90416;
-      transition: all 0.2s;
-    }
-
-    .cart-icon a:hover {
-      background: #D90416;
-      color: #fff;
-    }
-
     .search-bar input {
       padding: 8px 12px;
       width: 220px;
@@ -133,10 +118,6 @@
       margin: 0 6px;
       text-decoration: none;
     }
-
-    footer a:hover { text-decoration: underline; }
-    footer .social-icons { margin-top: 12px; }
-    footer .social-icons a { margin: 0 5px; }
   </style>
 </head>
 
@@ -178,21 +159,7 @@
 </main>
 
 <footer>
-  <div class="footer-links">
-    <a href="faq.html">FAQ</a> |
-    <a href="contact.html">Contact</a> |
-    <a href="authenticity.html">Authenticity</a> |
-    <a href="disclaimer.html">Disclaimer</a> |
-    <a href="privacy-policy.html">Privacy Policy</a> |
-    <a href="terms.html">Terms & Conditions</a> |
-    <a href="refund-policy.html">Refund Policy</a>
-  </div>
-  <p>Contact us: +92 317 7910929 | WhatsApp: <a href="https://wa.me/923177910929">+92 317 7910929</a></p>
-  <div class="social-icons">
-    <a href="#"><img src="images/whatsapp.png" alt="WhatsApp" width="24"></a>
-    <a href="#"><img src="images/instagram.png" alt="Instagram" width="24"></a>
-    <a href="#"><img src="images/facebook.png" alt="Facebook" width="24"></a>
-  </div>
+  <p>Contact us: +92 317 7910929</p>
 </footer>
 
 <script>
@@ -200,7 +167,8 @@
   let slide = 0;
   setInterval(() => {
     slide = (slide + 1) % 3;
-    document.getElementById("slides").style.transform = `translateX(-${slide * 100}%)`;
+    document.getElementById("slides").style.transform =
+      `translateX(-${slide * 100}%)`;
   }, 4000);
 
   /* CART */
@@ -225,53 +193,40 @@
   fetch("product/products.json")
     .then(r => r.json())
     .then(data => {
-      allProducts = data;
-      renderProducts(data);
-    });
+      allProducts = data.products;
+      renderProducts(data.products);
+    })
+    .catch(err => console.error("Product load failed:", err));
 
   function renderProducts(list) {
-  const grid = document.getElementById("products");
-  grid.innerHTML = "";
+    const grid = document.getElementById("products");
+    grid.innerHTML = "";
 
-  list.forEach(p => {
-    const discountBadge = p.discount ? `<div style="position:absolute;top:10px;left:10px;background:#D90416;color:#fff;padding:4px 6px;border-radius:4px;font-size:12px;">-${p.discount}</div>` : "";
-
-    let stockText = "In Stock";
-    let stockColor = "#28a745";
-    if(p.stock === 0 || p.stock === "0" || p.stock.toString().toLowerCase() === "out of stock") {
-      stockText = "Out of Stock";
-      stockColor = "#dc3545";
-    } else if(p.stock < 5) {
-      stockText = "Limited Stock";
-      stockColor = "#ffc107";
-    }
-
-    const ratingText = p.rating ? `⭐ ${p.rating}` : "";
-    const descriptionText = p.description ? `<p style="font-size:14px;color:#555;margin:6px 0;">${p.description}</p>` : "";
-
-    grid.innerHTML += `
-      <div class="product" style="position:relative;">
-        ${discountBadge}
-        <img src="${p.images ? p.images[0] : p.image}" alt="${p.name}">
-        <h3>
-          <a href="product.html?id=${encodeURIComponent(p.id)}" style="color:#212121; text-decoration:none;">
-            ${p.name}
-          </a>
-        </h3>
-        <p style="font-weight:bold;">PKR ${p.price}</p>
-        ${descriptionText}
-        <p style="font-size:13px;color:#666;">${ratingText} | Sold: ${p.sold || 0}</p>
-        <p style="font-size:13px;color:${stockColor};">${stockText}</p>
-        <button class="add-cart" onclick='addToCart(${JSON.stringify(p)})' ${stockText==="Out of Stock" ? "disabled style='opacity:0.6;cursor:not-allowed;'" : ""}>Add to Cart</button>
-        <button class="buy-now" onclick='addToCart(${JSON.stringify(p)}); location.href="order.html"' ${stockText==="Out of Stock" ? "disabled style='opacity:0.6;cursor:not-allowed;'" : ""}>Buy Now</button>
-      </div>
-    `;
-  });
-}
+    list.forEach(p => {
+      grid.innerHTML += `
+        <div class="product">
+          <img src="${p.images[0]}" alt="${p.name}">
+          <h3>
+            <a href="product.html?id=${encodeURIComponent(p.id)}"
+               style="color:#212121;text-decoration:none;">
+              ${p.name}
+            </a>
+          </h3>
+          <p>PKR ${p.price}</p>
+          <button class="add-cart"
+            onclick='addToCart(${JSON.stringify(p)})'>
+            Add to Cart
+          </button>
+        </div>
+      `;
+    });
+  }
 
   document.getElementById("search").addEventListener("input", e => {
     const q = e.target.value.toLowerCase();
-    renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q)));
+    renderProducts(allProducts.filter(p =>
+      p.name.toLowerCase().includes(q)
+    ));
   });
 
   updateCartCount();
