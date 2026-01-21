@@ -5,69 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Account | Irsa Foods</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, sans-serif; }
-        .container { padding: 20px; }
-        .section-title { font-weight:800; margin: 20px 0; font-size: 1.2rem; }
-        
-        /* Tracking Box */
-        .tracking-card { background:#f9f9f9; padding:20px; border-radius:15px; border:1px solid #eee; margin-bottom:30px; }
-        .track-input { width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-top:10px; }
-        .track-btn { width:100%; background:black; color:white; border:none; padding:12px; border-radius:8px; margin-top:10px; font-weight:700; }
+    /* 1. Global Reset */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, sans-serif; }
+    
+    /* 2. Header & Logo (Matches app.js) */
+    header { 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        height: 60px; 
+        padding: 0 15px; 
+        border-bottom: 1px solid #eee; 
+        background: white; 
+        position: sticky; 
+        top: 0; 
+        z-index: 1000; 
+    }
 
-        /* Order List */
-        .order-card { padding:15px; border:1px solid #eee; border-radius:12px; margin-bottom:15px; }
-        .order-id { font-weight:700; font-size:0.9rem; }
-        .order-date { font-size:0.75rem; color:gray; }
-        .order-status { font-size:0.75rem; color:orange; font-weight:700; text-transform:uppercase; }
-        /* HEADER CONSISTENCY FIX */
-header { 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    height: 60px; 
-    padding: 0 15px; 
-    border-bottom: 1px solid #eee; 
-    background: white; 
-    position: sticky; 
-    top: 0; 
-    z-index: 1000; 
-}
+    .logo-container { display: flex; align-items: center; }
+    
+    .main-logo { 
+        width: 32px !important; 
+        height: 32px !important; 
+        display: block; 
+    }
 
-/* Force the IF logo to be small */
-header .logo a, header .logo {
-    font-size: 1.4rem !important;
-    font-weight: 900 !important;
-    text-decoration: none !important;
-    color: black !important;
-    width: auto !important;
-    height: auto !important;
-}
+    .header-icons { 
+        display: flex; 
+        align-items: center; 
+        gap: 15px; 
+    }
 
-.header-icons { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-}
+    .icon-link { display: flex; align-items: center; justify-content: center; text-decoration: none; }
 
-/* The red badge fix */
-.cart-count { 
-    position: absolute; 
-    top: -5px; 
-    right: -5px; 
-    background: red; 
-    color: white; 
-    font-size: 10px; 
-    width: 16px; 
-    height: 16px; 
-    border-radius: 50%; 
-    display: none; 
-    align-items: center; 
-    justify-content: center; 
-    border: 1.5px solid white; 
-    font-weight: bold;
-}
+    .cart-count { 
+        position: absolute; 
+        top: -5px; 
+        right: -5px; 
+        background: red; 
+        color: white; 
+        font-size: 10px; 
+        width: 16px; 
+        height: 16px; 
+        border-radius: 50%; 
+        display: none; 
+        align-items: center; 
+        justify-content: center; 
+        border: 1.5px solid white; 
+        font-weight: bold;
+    }
 
-    </style>
+    /* 3. Account Page Content */
+    .container { padding: 20px; }
+    .section-title { font-weight:800; margin: 20px 0; font-size: 1.2rem; }
+    
+    /* Tracking Box */
+    .tracking-card { background:#f9f9f9; padding:20px; border-radius:15px; border:1px solid #eee; margin-bottom:30px; }
+    .track-input { width:100%; padding:14px; border:1px solid #ddd; border-radius:8px; margin-top:10px; outline: none; }
+    .track-btn { width:100%; background:black; color:white; border:none; padding:14px; border-radius:30px; margin-top:15px; font-weight:700; cursor: pointer; }
+
+    /* Order List */
+    .order-card { padding:15px; border:1px solid #eee; border-radius:12px; margin-bottom:15px; }
+    .order-id { font-weight:700; font-size:0.9rem; }
+    .order-date { font-size:0.75rem; color:gray; }
+    .order-status { font-size:0.75rem; color:orange; font-weight:700; text-transform:uppercase; }
+
+    /* Toast styling (If needed for notifications) */
+    .toast {
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        background: #333; color: white; padding: 12px 25px; border-radius: 30px;
+        font-size: 14px; font-weight: 600; opacity: 0; transition: opacity 0.3s;
+        z-index: 9999; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+</style>
+
 </head>
 <body>
     <header></header> <div class="container">
