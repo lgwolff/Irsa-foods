@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information | Irsa Foods</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        header { display: flex; align-items: center; justify-content: space-between; height: 60px; padding: 0 15px; border-bottom: 1px solid #eee; background: white; }
+        
+        .legal-container { padding: 20px; max-width: 800px; margin: 0 auto; }
+        .tabs { display: flex; overflow-x: auto; gap: 20px; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .tab-btn { background: none; border: none; font-weight: 700; color: #999; cursor: pointer; white-space: nowrap; font-size: 0.9rem; }
+        .tab-btn.active { color: #000; border-bottom: 2px solid #000; padding-bottom: 8px; }
+        
+        .content-section { display: none; line-height: 1.6; color: #333; }
+        .content-section.active { display: block; }
+        h2 { margin-bottom: 15px; font-weight: 800; }
+        p { margin-bottom: 15px; font-size: 0.95rem; }
+        .brand-list { background: #f9f9f9; padding: 15px; border-radius: 8px; font-weight: 600; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <div class="legal-container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'about')">ABOUT US</button>
+            <button class="tab-btn" onclick="openTab(event, 'contact')">CONTACT</button>
+            <button class="tab-btn" onclick="openTab(event, 'shipping')">SHIPPING & REFUNDS</button>
+            <button class="tab-btn" onclick="openTab(event, 'privacy')">PRIVACY</button>
+        </div>
+
+        <div id="about" class="content-section active">
+            <h2>About Irsa Foods</h2>
+            <p>Welcome to <strong>Irsa Foods</strong>, your trusted destination for the finest snacks and confectionery in Pakistan. Based in Daska, we pride ourselves on delivering 100% authentic products directly to your doorstep.</p>
+            <p>We source only from the most premium and beloved brands, including:</p>
+            <div class="brand-list">
+                Mayfair, LU Biscuits, Peek Freans, Bisconi, Candyland, Innovative, Mars, KitKat, and more.
+            </div>
+            <p>Our mission is simple: To provide the convenience of online shopping while maintaining the freshness and quality of your favorite treats.</p>
+        </div>
+
+        <div id="contact" class="content-section">
+            <h2>Contact Us</h2>
+            <p>Have a question or need to track your order? We are here to help!</p>
+            <p><strong>WhatsApp:</strong> +92 317 7910929</p>
+            <p><strong>Email:</strong> irsafoods@gmail.com</p>
+            <p><strong>Location:</strong> Daska, Punjab, Pakistan</p>
+            <p>Our support team is available Monday to Saturday, 9:00 AM to 9:00 PM.</p>
+        </div>
+
+        <div id="shipping" class="content-section">
+            <h2>Shipping & Refund Policy</h2>
+            <p><strong>Shipping:</strong> We deliver across Pakistan. Orders are typically processed within 24 hours.</p>
+            <p><strong>Refunds:</strong> Due to the nature of food products, we do not accept returns. However, if you receive a damaged or incorrect item, please contact us on WhatsApp within 24 hours of delivery with a photo of the product for a replacement or refund.</p>
+        </div>
+
+        <div id="privacy" class="content-section">
+            <h2>Privacy Policy</h2>
+            <p>Your privacy is important to us. We only collect the information necessary to fulfill your orders (Name, Phone Number, and Address).</p>
+            <p>Irsa Foods does not sell, rent, or share your personal data with third parties for marketing purposes. Your data is strictly used for delivery and order communication.</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        function openTab(evt, tabName) {
+            var i, content, tablinks;
+            content = document.getElementsByClassName("content-section");
+            for (i = 0; i < content.length; i++) { content[i].className = content[i].className.replace(" active", ""); }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) { tablinks[i].className = tablinks[i].className.replace(" active", ""); }
+            document.getElementById(tabName).className += " active";
+            evt.currentTarget.className += " active";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(window.renderHeader) renderHeader();
+        });
+    </script>
+</body>
+              </html>
+              
