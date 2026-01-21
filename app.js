@@ -83,9 +83,14 @@ function displayProducts(filteredList = products, isLoadMore = false) {
 
     const html = itemsToShow.map(product => `
         <a href="product-detail.html?id=${product.id}" class="product-card">
-            <img src="${product.image}" onerror="this.src='https://placehold.co/400x400/f5f5f5/000000?text=Irsa+Foods'" class="product-image">
+            <img src="${product.image}" 
+                 alt="Buy ${product.name} - Irsa Foods Daska" 
+                 onerror="this.src='https://placehold.co/400x400/f5f5f5/000000?text=Irsa+Foods'" 
+                 class="product-image">
             <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
+                <h2 class="product-name" style="font-size: 0.9rem; font-weight: 600; margin: 8px 0 2px;">
+                    ${product.name}
+                </h2>
                 <p class="product-price">Rs. ${product.price}</p>
             </div>
         </a>
