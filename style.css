@@ -1,0 +1,71 @@
+:root {
+    --black: #000000;
+    --white: #ffffff;
+    --gray-medium: #e5e5e5;
+}
+
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    -webkit-tap-highlight-color: transparent;
+}
+
+body { 
+    font-family: sans-serif; 
+    background: var(--white); 
+    color: var(--black);
+}
+
+/* Forces all links and icons to stay BLACK */
+a, .icon-link, span {
+    color: var(--black) !important;
+    text-decoration: none !important;
+}
+
+/* Header & Logo Logic */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    height: 60px;
+    border-bottom: 1px solid var(--gray-medium);
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-logo {
+    width: 35px !important;
+    height: auto !important;
+    display: block;
+}
+
+.header-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+/* Category Scroll */
+.cat-scroll {
+    display: flex; 
+    gap: 10px; 
+    padding: 20px; 
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.cat-scroll::-webkit-scrollbar { display: none; }
+
+.cat-btn {
+    border: 1px solid #ddd; 
+    background: white; 
+    padding: 8px 15px; 
+    border-radius: 20px; 
+    font-size: 0.8rem;
+    white-space: nowrap;
+}

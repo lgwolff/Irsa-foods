@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Irsa Foods | Modern Snacks</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        header { display: flex; align-items: center; justify-content: space-between; height: 60px; padding: 0 15px; border-bottom: 1px solid #eee; background: white; position: sticky; top: 0; z-index: 1000; }
+        .main-logo { width: 30px; height: 30px; display: block; }
+       /* Keeps the header icons aligned in a row */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* The fixed red bubble */
+.cart-count {
+    position: absolute;
+    top: -5px;      /* Moves it slightly up */
+    right: -5px;    /* Moves it slightly right */
+    background: #ff0000;
+    color: white;
+    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: none; /* JS will turn this to 'flex' */
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 1.5px solid white; /* Adds a clean gap between red and black icon */
+}
+
+/* Ensure the logo stays consistent */
+.main-logo {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+        
+        .cat-scroll { display: flex; gap: 10px; padding: 20px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .cat-btn { border: 1px solid #ddd; background: white; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
+        .product-card { text-decoration: none; color: inherit; display: block; -webkit-tap-highlight-color: transparent; }
+        .product-image { width: 100%; aspect-ratio: 1/1; background: #f5f5f5; object-fit: cover; border-radius: 4px; }
+        .product-name { font-size: 0.9rem; font-weight: 600; margin: 8px 0 2px; }
+        .product-price { font-size: 0.85rem; color: #666; }
+
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: black; color: white; padding: 12px 25px; border-radius: 30px; font-size: 0.85rem; z-index: 9999; transition: 0.3s; opacity: 0; pointer-events: none; }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .search-container {
+    position: absolute;
+    top: 60px; /* Right below the header */
+    left: 0;
+    width: 100%;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.promo-slider {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    padding: 10px 20px;
+    scroll-snap-type: x mandatory;
+}
+
+.promo-slider::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.promo-track {
+    display: flex;
+    gap: 15px;
+}
+
+.promo-slide {
+    min-width: 85%; /* Shows a peek of the next slide */
+    height: 120px; /* Kept it small as requested */
+    border-radius: 15px;
+    scroll-snap-align: center;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.promo-content span {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.promo-content h3 {
+    font-size: 1.1rem;
+    margin: 4px 0;
+    font-weight: 800;
+}
+
+.promo-content small {
+    color: #888;
+    font-size: 0.75rem;
+}
+/* Fix the grid spacing and image alignment */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+    gap: 20px;
+    padding: 15px;
+    align-items: start;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.product-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: contain; /* Prevents Daraz images from being cut off */
+    background: #f9f9f9;
+    border: 1px solid #f0f0f0;
+}
+
+
+    </style>
+</head>
+<body>
+    <header></header>
+    <main>
+        <section style="padding: 40px 20px; text-align: center;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; text-transform: uppercase;">Irsa Foods</h1>
+            <p style="font-size: 0.9rem; color: #666;">Premium Biscuits, Cakes & Chocolates.</p>
+        </section>
+        <div class="promo-slider">
+    <div class="promo-track">
+        <div class="promo-slide" style="background: #fdf2f2;">
+            <div class="promo-content">
+                <span>NEW ARRIVAL</span>
+                <h3>Fresh Batch of Make-up</h3>
+                <small>Limited stock available</small>
+            </div>
+        </div>
+        <div class="promo-slide" style="background: #f2f7fd;">
+            <div class="promo-content">
+                <span>OFFER</span>
+                <h3>Flat 5% Off Biscuits</h3>
+                <small>Use Code: WELCOME</small>
+            </div>
+        </div>
+        <div class="promo-slide" style="background: #f2fdf5;">
+            <div class="promo-content">
+                <span>FREE DELIVERY</span>
+                <h3>On orders above Rs. 4999</h3>
+                <small>Across Pakistan</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="cat-scroll">
+    <button class="cat-btn" onclick="filterProducts('All')">All</button>
+    <button class="cat-btn" onclick="filterProducts('Biscuits')">Biscuits</button>
+    <button class="cat-btn" onclick="filterProducts('Cakes')">Cakes</button>
+    <button class="cat-btn" onclick="filterProducts('Chocolates')">Chocolates</button>
+    <button class="cat-btn" onclick="filterProducts('Candies')">Candies</button>
+    <button class="cat-btn" onclick="filterProducts('Drinks')">Drinks</button>
+    <button class="cat-btn" onclick="filterProducts('Fragrance')">Fragrance</button>
+    <button class="cat-btn" onclick="filterProducts('Make-up')">Make-up</button>
+    <button class="cat-btn" onclick="filterProducts('Accessories')">Accessories</button>
+    <button class="cat-btn" onclick="filterProducts('Gifts')">Gifts</button>
+</div>
+
+        <div id="product-grid" class="product-grid"></div>
+    </main>
+    <footer></footer>
+    <div id="toast"></div>
+    <script src="products.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

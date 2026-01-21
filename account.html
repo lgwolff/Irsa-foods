@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | Irsa Foods</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, sans-serif; }
+        .container { padding: 20px; }
+        .section-title { font-weight:800; margin: 20px 0; font-size: 1.2rem; }
+        
+        /* Tracking Box */
+        .tracking-card { background:#f9f9f9; padding:20px; border-radius:15px; border:1px solid #eee; margin-bottom:30px; }
+        .track-input { width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-top:10px; }
+        .track-btn { width:100%; background:black; color:white; border:none; padding:12px; border-radius:8px; margin-top:10px; font-weight:700; }
+
+        /* Order List */
+        .order-card { padding:15px; border:1px solid #eee; border-radius:12px; margin-bottom:15px; }
+        .order-id { font-weight:700; font-size:0.9rem; }
+        .order-date { font-size:0.75rem; color:gray; }
+        .order-status { font-size:0.75rem; color:orange; font-weight:700; text-transform:uppercase; }
+        /* HEADER CONSISTENCY FIX */
+header { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    height: 60px; 
+    padding: 0 15px; 
+    border-bottom: 1px solid #eee; 
+    background: white; 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+}
+
+/* Force the IF logo to be small */
+header .logo a, header .logo {
+    font-size: 1.4rem !important;
+    font-weight: 900 !important;
+    text-decoration: none !important;
+    color: black !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.header-icons { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+/* The red badge fix */
+.cart-count { 
+    position: absolute; 
+    top: -5px; 
+    right: -5px; 
+    background: red; 
+    color: white; 
+    font-size: 10px; 
+    width: 16px; 
+    height: 16px; 
+    border-radius: 50%; 
+    display: none; 
+    align-items: center; 
+    justify-content: center; 
+    border: 1.5px solid white; 
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+    <header></header> <div class="container">
+        <h2 class="section-title">TRACK SHIPMENT (PostEx)</h2>
+        <div class="tracking-card">
+            <p style="font-size:0.85rem; color:#666;">Enter your PostEx Tracking ID provided via WhatsApp:</p>
+            <input type="text" id="postex-id" class="track-input" placeholder="e.g. 123456789">
+            <button class="track-btn" onclick="trackPostEx()">TRACK ORDER</button>
+        </div>
+
+        <h2 class="section-title">MY ORDERS</h2>
+        <div id="order-history-list">
+            </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        function renderHistory() {
+            const list = document.getElementById('order-history-list');
+            const orders = JSON.parse(localStorage.getItem('irsa_orders')) || [];
+
+            if(orders.length === 0) {
+                list.innerHTML = `<p style="color:gray; text-align:center; padding:20px;">No orders found yet.</p>`;
+                return;
+            }
+
+            list.innerHTML = orders.map(order => `
+                <div class="order-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <span class="order-id">Order #${order.id}</span>
+                        <span class="order-status">${order.status}</span>
+                    </div>
+                    <p style="font-size:0.85rem; margin-bottom:5px;">${order.items}</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="order-date">${order.date}</span>
+                        <span style="font-weight:700;">Rs. ${order.total}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function trackPostEx() {
+    const id = document.getElementById('postex-id').value.trim();
+    const errorEl = document.getElementById('track-error'); // Assuming you have this 
+    
+    if(!id) {
+        alert("Please enter a Tracking ID");
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://api.postex.pk/services/integration/api/order/v1/track-order/${id}`, {
+            method: 'GET',
+            headers: {
+                'token': 'MjUwOTQ3YzRlM2M2NDY0Yjk3NWE1OTZkN2ZkZDNkYjA6YjcyOTllNTNjZmY0NDczZTgxOWExOTA0M2JjOTQ3ZGE=', // Get this from your PostEx dashboard
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.statusCode === "200") {
+            // Show the latest status from the history
+            const latestStatus = data.dist.transactionStatusHistory[0].transactionStatusMessage;
+            alert(`Order Status: ${latestStatus}`);
+        } else {
+            alert("Tracking ID not found. Please check and try again.");
+        }
+    } catch (error) {
+        console.error("PostEx API Error:", error);
+        // Fallback: If API fails, open the tracking page instead so the user isn't stuck
+        window.location.href = `https://postex.pk/tracking?track-id=${id}`;
+    }
+}
+
+
+    // Open PostEx in the same window (better for mobile users)
+    window.location.href = `https://postex.pk/tracking?track-id=${id}`;
+}
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeader(); // Ensure this is in app.js
+            renderHistory();
+        });
+    </script>
+</body>
+</html>

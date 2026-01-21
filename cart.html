@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Your Bag | Irsa Foods</title>
+   <style>
+    /* 1. Global & Header Fixes */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+    header { display: flex; align-items: center; justify-content: space-between; height: 60px; padding: 0 15px; border-bottom: 1px solid #eee; background: white; }
+    
+    .main-logo { width: 28px !important; height: 28px !important; }
+    .header-icons { display: flex; align-items: center; gap: 12px; }
+
+    .cart-count { 
+        position: absolute; top: -5px; right: -5px; background: #ff0000; color: white; 
+        font-size: 10px; width: 16px; height: 16px; border-radius: 50%; 
+        display: none; align-items: center; justify-content: center; 
+        font-weight: bold; border: 1.5px solid white; 
+    }
+
+    /* 2. Cart Specifics */
+    .cart-item { display: flex; gap: 15px; padding: 15px; border-bottom: 1px solid #eee; align-items: center; }
+    .cart-item-img { width: 70px; height: 70px; border-radius: 4px; object-fit: cover; background: #f5f5f5; }
+    
+    .total-price { display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 15px; font-size: 1.1rem; }
+    
+    #coupon-area { padding: 15px 20px; border-bottom: 1px solid #eee; background: #fff; }
+
+    /* Toast styling to ensure it shows */
+    .toast {
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        background: #333; color: white; padding: 12px 25px; border-radius: 30px;
+        font-size: 14px; font-weight: 600; opacity: 0; transition: opacity 0.3s;
+        z-index: 9999; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+</style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+    <header></header>
+    
+    <main id="cart-view" style="padding-bottom: 50px;">
+        <h2 style="padding: 20px; font-weight: 800;">YOUR BAG</h2>
+        
+        <div id="cart-items-container"></div>
+
+        <div id="coupon-area">
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="coupon-input" placeholder="Enter Coupon Code" 
+                       style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 0.85rem;">
+                <button onclick="applyCoupon()" 
+                        style="background: #000; color: #fff; border: none; padding: 0 20px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer;">
+                    APPLY
+                </button>
+            </div>
+            <p id="coupon-msg" style="font-size: 0.75rem; margin-top: 8px; display: none; font-weight: 600;"></p>
+        </div>
+
+        <div id="checkout-section" style="padding: 20px; background: #f9f9f9; border-top: 2px solid #000; margin-top: 20px;">
+            <h3 style="margin-bottom:15px; font-weight: 800;">DELIVERY DETAILS</h3>
+            <input type="text" id="cust-name" placeholder="Full Name" style="width:100%; padding:14px; margin-bottom: 10px; border:1px solid #ddd; border-radius: 8px; outline: none;">
+            <input type="text" id="cust-phone" placeholder="Phone Number (Active)" style="width:100%; padding:14px; margin-bottom: 10px; border:1px solid #ddd; border-radius: 8px; outline: none;">
+            <textarea id="cust-address" placeholder="Full Delivery Address (House #, Street, City)" style="width:100%; padding:14px; margin-bottom: 10px; border:1px solid #ddd; border-radius: 8px; height: 80px; outline: none;"></textarea>
+            
+            <div class="total-price" style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
+                <span>TOTAL TO PAY</span>
+                <span id="cart-total">Rs. 0</span>
+            </div>
+
+            <button onclick="checkoutEmail(this)" style="width: 100%; background: #000; color: white; padding: 18px; border: none; border-radius: 30px; margin-top: 10px; font-weight: bold; cursor: pointer; font-size: 0.9rem;">
+                PLACE ORDER VIA EMAIL
+            </button>
+            
+            <button onclick="checkoutWhatsApp()" style="width: 100%; background: #25D366; color: white; padding: 18px; border: none; border-radius: 30px; margin-top: 10px; font-weight: bold; cursor: pointer; font-size: 0.9rem;">
+                ORDER VIA WHATSAPP
+            </button>
+        </div>
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="products.js"></script>
+    <script src="app.js"></script>
+    <script>
+        let discountPercent = 0;
+        const VALID_COUPONS = { "WELCOME": 5, "IRSA": 1, "SWEET": 2 };
+
+        function renderCartPage() {
+            const container = document.getElementById('cart-items-container');
+            const totalEl = document.getElementById('cart-total');
+            const checkoutSection = document.getElementById('checkout-section');
+            const couponArea = document.getElementById('coupon-area');
+            
+            const cart = JSON.parse(localStorage.getItem('irsa_cart')) || [];
+            container.innerHTML = '';
+            let subtotal = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 80px 20px; text-align: center;">
+                        <p style="color: #666; margin-bottom: 25px;">Your bag is empty.</p>
+                        <a href="index.html" style="display: inline-block; padding: 15px 35px; background: black; color: white; text-decoration: none; border-radius: 30px; font-weight: 700;">CONTINUE SHOPPING</a>
+                    </div>`;
+                if (checkoutSection) checkoutSection.style.display = 'none';
+                if (couponArea) couponArea.style.display = 'none';
+                totalEl.innerText = 'Rs. 0';
+                return;
+            }
+
+            if (checkoutSection) checkoutSection.style.display = 'block';
+            if (couponArea) couponArea.style.display = 'block';
+            
+            container.innerHTML = cart.map((item, index) => {
+                const qty = item.quantity || 1;
+                const itemTotal = parseInt(item.price) * qty;
+                subtotal += itemTotal;
+                return `
+                    <div class="cart-item">
+                        <img src="${item.image}" class="cart-item-img">
+                        <div style="flex:1;">
+                            <h4 style="font-size:0.9rem; font-weight:700;">${item.name}</h4>
+                            <p style="font-size:0.8rem; color:gray; margin-bottom:8px;">Rs. ${item.price}</p>
+                            <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 15px; width: fit-content; padding: 2px 10px; gap: 10px;">
+                                <button onclick="updateCartQty(${index}, -1)" style="border:none; background:none; font-weight:bold; cursor:pointer;">-</button>
+                                <span style="font-size:0.8rem; font-weight:bold;">${qty}</span>
+                                <button onclick="updateCartQty(${index}, 1)" style="border:none; background:none; font-weight:bold; cursor:pointer;">+</button>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-weight:700; font-size:0.9rem;">Rs. ${itemTotal}</p>
+                            <button onclick="removeFromCart(${index})" style="background:none; border:none; color:#ff4d4d; font-size:11px; margin-top:10px; cursor:pointer; font-weight:600;">REMOVE</button>
+                        </div>
+                    </div>`;
+            }).join('');
+
+            let finalTotal = subtotal - (subtotal * discountPercent / 100);
+            totalEl.innerText = `Rs. ${finalTotal}`;
+        }
+
+        function updateCartQty(index, change) {
+            let cart = JSON.parse(localStorage.getItem('irsa_cart')) || [];
+            cart[index].quantity = (cart[index].quantity || 1) + change;
+            if (cart[index].quantity <= 0) cart.splice(index, 1);
+            localStorage.setItem('irsa_cart', JSON.stringify(cart));
+            renderCartPage();
+            if(window.updateCartCount) updateCartCount();
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('irsa_cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('irsa_cart', JSON.stringify(cart));
+            renderCartPage(); 
+            if(window.updateCartCount) updateCartCount();
+        }
+
+        function applyCoupon() {
+            const input = document.getElementById('coupon-input').value.toUpperCase();
+            const msg = document.getElementById('coupon-msg');
+            if (VALID_COUPONS[input]) {
+                discountPercent = VALID_COUPONS[input];
+                msg.innerText = `Success! ${discountPercent}% discount applied.`;
+                msg.style.color = "green";
+            } else {
+                discountPercent = 0;
+                msg.innerText = "Invalid coupon code.";
+                msg.style.color = "red";
+            }
+            msg.style.display = "block";
+            renderCartPage();
+        }
+
+        function checkoutWhatsApp() {
+            const cart = JSON.parse(localStorage.getItem('irsa_cart')) || [];
+            if (cart.length === 0) return;
+            let subtotal = 0;
+            let itemsDescription = "";
+            cart.forEach(item => {
+                let qty = item.quantity || 1;
+                subtotal += parseInt(item.price) * qty;
+                itemsDescription += `${qty}x ${item.name}, `;
+            });
+            let final = subtotal - (subtotal * discountPercent / 100);
+            let message = `New Order from Irsa Foods:%0AItems: ${itemsDescription.slice(0, -2)}%0A*TOTAL: Rs. ${final}*`;
+            localStorage.removeItem('irsa_cart'); 
+            window.location.href = `https://wa.me/923177910929?text=${message}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeader();
+            renderCartPage();
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
