@@ -64,14 +64,24 @@ function renderFooter() {
 }
 
 
-function displayProducts(filteredList = products) {
+let visibleCount = 8; 
+let activeProducts = []; 
+
+function displayProducts(filteredList = products, isLoadMore = false) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
-    if (filteredList.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 50px; color: gray;">No products found.</p>`;
-        return;
+
+    activeProducts = filteredList; // Store the current list (all, or filtered)
+
+    // If it's a new category/search, start from 8. If "Load More", add 8.
+    if (!isLoadMore) {
+        visibleCount = 8;
+        grid.innerHTML = ''; 
     }
-    grid.innerHTML = filteredList.map(product => `
+
+    const itemsToShow = activeProducts.slice(isLoadMore ? visibleCount - 8 : 0, visibleCount);
+
+    const html = itemsToShow.map(product => `
         <a href="product-detail.html?id=${product.id}" class="product-card">
             <img src="${product.image}" onerror="this.src='https://placehold.co/400x400/f5f5f5/000000?text=Irsa+Foods'" class="product-image">
             <div class="product-info">
@@ -80,7 +90,21 @@ function displayProducts(filteredList = products) {
             </div>
         </a>
     `).join('');
+
+    grid.insertAdjacentHTML('beforeend', html);
+
+    // Manage the "Show More" Button visibility
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = (visibleCount < activeProducts.length) ? 'inline-block' : 'none';
+    }
 }
+
+function handleLoadMore() {
+    visibleCount += 8;
+    displayProducts(activeProducts, true);
+}
+
 
 function filterProducts(category) {
     const filtered = category === 'All' ? products : products.filter(p => p.category === category);
