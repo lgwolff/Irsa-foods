@@ -39,19 +39,20 @@ function renderHeader() {
 }
 
 function renderFooter() {
-    const footerHtml = `
-    <footer style="margin-top: 50px; padding: 40px 20px; background: #f9f9f9; border-top: 1px solid #eee; text-align: center;">
-        <h3 style="font-weight: 800; margin-bottom: 20px;">IRSA FOODS</h3>
-        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; font-size: 0.8rem; font-weight: 600;">
-            <a href="legal.html" style="text-decoration: none; color: #666;">ABOUT</a>
-            <a href="legal.html" style="text-decoration: none; color: #666;">CONTACT</a>
-            <a href="legal.html" style="text-decoration: none; color: #666;">REFUND POLICY</a>
+    const footer = document.querySelector('footer');
+    if (!footer) return; // If there is no footer tag, stop.
+
+    footer.innerHTML = `
+        <div style="margin-top: 50px; padding: 40px 20px; background: #f9f9f9; border-top: 1px solid #eee; text-align: center; width: 100%;">
+            <h3 style="font-weight: 800; margin-bottom: 20px;">IRSA FOODS</h3>
+            <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; font-size: 0.8rem; font-weight: 600;">
+                <a href="legal.html" style="text-decoration: none; color: #666;">ABOUT</a>
+                <a href="legal.html" style="text-decoration: none; color: #666;">CONTACT</a>
+                <a href="legal.html" style="text-decoration: none; color: #666;">REFUND POLICY</a>
+            </div>
+            <p style="font-size: 0.7rem; color: #999;">© 2026 Irsa Foods Daska. All rights reserved.</p>
         </div>
-        <p style="font-size: 0.7rem; color: #999;">© 2026 Irsa Foods Daska. All rights reserved.</p>
-    </footer>`;
-    
-    // This appends the footer to the bottom of the body
-    document.body.insertAdjacentHTML('beforeend', footerHtml);
+    `;
 }
 
 function displayProducts(filteredList = products) {
