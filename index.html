@@ -130,7 +130,45 @@
     border: 1px solid #f0f0f0;
 }
 
+.load-more-container {
+    text-align: center;
+    padding: 40px 0;
+    width: 100%;
+}
 
+.rough-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    /* This creates the clipped/rough corners */
+    clip-path: polygon(10% 0, 90% 0, 100% 30%, 100% 70%, 90% 100%, 10% 100%, 0 70%, 0 30%);
+    transition: transform 0.2s, background 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.rough-btn:active {
+    transform: scale(0.95);
+}
+
+/* The detail lines under the text in your sketch */
+.rough-btn::after {
+    content: "";
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: white;
+    box-shadow: 0 -4px 0 white; /* Double line effect */
+        }
+    
     </style>
 </head>
 <body>
@@ -180,6 +218,12 @@
 </div>
 
         <div id="product-grid" class="product-grid"></div>
+        <div class="load-more-container">
+    <button id="load-more-btn" class="rough-btn" onclick="handleLoadMore()">
+        Show More
+    </button>
+        </div>
+        
     </main>
     <footer></footer>
     <div id="toast"></div>
