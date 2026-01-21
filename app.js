@@ -39,18 +39,19 @@ function renderHeader() {
 }
 
 function renderFooter() {
-    const footer = document.querySelector('footer');
-    if (!footer) return;
-    footer.innerHTML = `
-        <div style="padding: 20px; border-top: 1px solid #eee; margin-top: 50px;">
-            <div style="display:flex; gap:15px; margin-bottom:10px;">
-                <a href="https://wa.me/923177910929" style="color:black; font-weight:bold; text-decoration:none;">WA</a>
-                <a href="#" style="color:black; font-weight:bold; text-decoration:none;">IG</a>
-                <a href="#" style="color:black; font-weight:bold; text-decoration:none;">FB</a>
-            </div>
-            <p style="font-size:12px; color:gray;">© 2026 Irsa Foods. All rights reserved.</p>
+    const footerHtml = `
+    <footer style="margin-top: 50px; padding: 40px 20px; background: #f9f9f9; border-top: 1px solid #eee; text-align: center;">
+        <h3 style="font-weight: 800; margin-bottom: 20px;">IRSA FOODS</h3>
+        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; font-size: 0.8rem; font-weight: 600;">
+            <a href="legal.html" style="text-decoration: none; color: #666;">ABOUT</a>
+            <a href="legal.html" style="text-decoration: none; color: #666;">CONTACT</a>
+            <a href="legal.html" style="text-decoration: none; color: #666;">REFUND POLICY</a>
         </div>
-    `;
+        <p style="font-size: 0.7rem; color: #999;">© 2026 Irsa Foods Daska. All rights reserved.</p>
+    </footer>`;
+    
+    // This appends the footer to the bottom of the body
+    document.body.insertAdjacentHTML('beforeend', footerHtml);
 }
 
 function displayProducts(filteredList = products) {
