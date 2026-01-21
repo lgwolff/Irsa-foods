@@ -219,14 +219,24 @@
   /* PRODUCTS */
   let allProducts = [];
 
-  fetch("product/products.json")
-    .then(r => r.json())
-    .then(data => {
-  const products = Array.isArray(data) ? data : data.products;
-  allProducts = products;
-  renderProducts(products);
-});
+  <script>
+const allProducts = [
+  {
+    "id": "101",
+    "name": "Daraz Test Product",
+    "price": "1299",
+    "description": "Original product imported from Daraz",
+    "rating": "4.6",
+    "sold": 250,
+    "stock": "In Stock",
+    "images": [
+      "https://via.placeholder.com/400x400"
+    ]
+  }
+];
 
+renderProducts(allProducts);
+</script>
   function renderProducts(list) {
   const grid = document.getElementById("products");
   grid.innerHTML = "";
