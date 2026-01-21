@@ -40,20 +40,29 @@ function renderHeader() {
 
 function renderFooter() {
     const footer = document.querySelector('footer');
-    if (!footer) return; // If there is no footer tag, stop.
+    if (!footer) return;
+
+    // Apply clean styling directly to the footer tag to ensure visibility
+    footer.style.marginTop = "50px";
+    footer.style.padding = "40px 20px";
+    footer.style.background = "#f9f9f9";
+    footer.style.borderTop = "1px solid #eee";
+    footer.style.textAlign = "center";
+    footer.style.display = "block"; // Force display
 
     footer.innerHTML = `
-        <div style="margin-top: 50px; padding: 40px 20px; background: #f9f9f9; border-top: 1px solid #eee; text-align: center; width: 100%;">
-            <h3 style="font-weight: 800; margin-bottom: 20px;">IRSA FOODS</h3>
-            <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; font-size: 0.8rem; font-weight: 600;">
-                <a href="legal.html" style="text-decoration: none; color: #666;">ABOUT</a>
-                <a href="legal.html" style="text-decoration: none; color: #666;">CONTACT</a>
-                <a href="legal.html" style="text-decoration: none; color: #666;">REFUND POLICY</a>
-            </div>
-            <p style="font-size: 0.7rem; color: #999;">© 2026 Irsa Foods Daska. All rights reserved.</p>
+        <h3 style="font-weight: 800; margin-bottom: 15px; color: #000; font-size: 1.2rem; display: block;">IRSA FOODS</h3>
+        
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+            <a href="legal.html" style="text-decoration: none; color: #666; font-size: 0.85rem; font-weight: 700;">ABOUT</a>
+            <a href="legal.html" style="text-decoration: none; color: #666; font-size: 0.85rem; font-weight: 700;">CONTACT</a>
+            <a href="legal.html" style="text-decoration: none; color: #666; font-size: 0.85rem; font-weight: 700;">POLICIES</a>
         </div>
+        
+        <p style="font-size: 0.75rem; color: #aaa; margin: 0;">© 2026 Irsa Foods Daska. All rights reserved.</p>
     `;
 }
+
 
 function displayProducts(filteredList = products) {
     const grid = document.getElementById('product-grid');
