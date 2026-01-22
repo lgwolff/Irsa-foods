@@ -31,6 +31,50 @@
     #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: black; color: white; padding: 12px 25px; border-radius: 30px; font-size: 0.85rem; z-index: 9999; transition: 0.3s; opacity: 0; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 </style>
+<script>
+    // 1. This function creates the hidden "cheat sheet" for Google (Schema)
+    function injectProductSchema(product) {
+        const schema = {
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": product.name,
+            "image": [product.image],
+            "description": `Buy ${product.name} at Irsa Foods Daska.`,
+            "offers": {
+                "@type": "Offer",
+                "priceCurrency": "PKR",
+                "price": product.price,
+                "availability": "https://schema.org/InStock"
+            }
+        };
+
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(schema);
+        document.head.appendChild(script); // Adds it to the <head> section automatically
+    }
+
+    // 2. Logic to find and show the product details
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+
+        // 'products' is the array from your products.js file
+        const product = products.find(p => p.id == productId);
+
+        if (product) {
+            // Update your page HTML with product data
+            document.title = `${product.name} | Irsa Foods`;
+            // Add other display logic here (e.g., setting image src, name text, etc.)
+
+            // FINALLY: Run the SEO Schema
+            injectProductSchema(product);
+        }
+    });
+</script>
+
+</body>
+</html>
 
 </head>
 <body>
