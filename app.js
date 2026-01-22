@@ -81,20 +81,21 @@ function displayProducts(filteredList = products, isLoadMore = false) {
 
     const itemsToShow = activeProducts.slice(isLoadMore ? visibleCount - 8 : 0, visibleCount);
 
-    const html = itemsToShow.map(product => `
-        <a href="product-detail.html?id=${product.id}" class="product-card">
-            <img src="${product.image}" 
-                 alt="Buy ${product.name} - Irsa Foods Daska" 
-                 onerror="this.src='https://placehold.co/400x400/f5f5f5/000000?text=Irsa+Foods'" 
-                 class="product-image">
-            <div class="product-info">
-                <h2 class="product-name" style="font-size: 0.9rem; font-weight: 600; margin: 8px 0 2px;">
-                    ${product.name}
-                </h2>
-                <p class="product-price">Rs. ${product.price}</p>
-            </div>
-        </a>
-    `).join('');
+    const html = itemsToShow.map((product, index) => `
+    <a href="product-detail.html?id=${product.id}" class="product-card">
+        <img src="${product.image}" 
+             alt="Buy ${product.name} - Irsa Foods Daska" 
+             ${index === 0 ? 'fetchpriority="high"' : ''} 
+             onerror="this.src='https://placehold.co/400x400/f5f5f5/000000?text=Irsa+Foods'" 
+             class="product-image">
+        <div class="product-info">
+            <h2 class="product-name" style="font-size: 0.9rem; font-weight: 600; margin: 8px 0 2px;">
+                ${product.name}
+            </h2>
+            <p class="product-price">Rs. ${product.price}</p>
+        </div>
+    </a>
+`).join('');
 
     grid.insertAdjacentHTML('beforeend', html);
 
