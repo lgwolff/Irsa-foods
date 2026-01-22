@@ -59,7 +59,7 @@ function renderFooter() {
             <a href="legal.html" style="text-decoration: none; color: #666; font-size: 0.85rem; font-weight: 700;">POLICIES</a>
         </div>
         
-        <p style="font-size: 0.75rem; color: #aaa; margin: 0;">© 2026 Irsa Foods Daska. All rights reserved.</p>
+        <p style="font-size: 0.75rem; color: #555; margin: 0;">© 2026 Irsa Foods Daska. All rights reserved.</p>
     `;
 }
 
