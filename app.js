@@ -85,17 +85,15 @@ function displayProducts(filteredList = products, isLoadMore = false) {
     <a href="product-detail.html?id=${product.id}" class="product-card">
         <img src="${product.image}" 
              alt="Buy ${product.name} - Irsa Foods Daska" 
-             ${index === 0 ? 'fetchpriority="high"' : ''} 
+             /* First image loads instantly, others wait until scroll */
+             ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} 
+             width="400" height="400"
              onerror="this.src='https://placehold.co/400x400/f5f5f5/000000?text=Irsa+Foods'" 
              class="product-image">
-        <div class="product-info">
-            <h2 class="product-name" style="font-size: 0.9rem; font-weight: 600; margin: 8px 0 2px;">
-                ${product.name}
-            </h2>
-            <p class="product-price">Rs. ${product.price}</p>
-        </div>
+        ...
     </a>
 `).join('');
+
 
     grid.insertAdjacentHTML('beforeend', html);
 
